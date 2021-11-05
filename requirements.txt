@@ -1,10 +1,1 @@
-django>1.11.29,<2
-django-extensions==2.1.6
-docutils==0.14
-easy-thumbnails==2.6
-ipython==5.8.0
-pip-chill==0.1.8
-psycopg2-binary==2.7.7
-pyopenssl==19.0.0
-simple-salesforce==0.74.2
-
+django~=3.2.7

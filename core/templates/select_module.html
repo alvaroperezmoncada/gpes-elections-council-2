@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+    {% for module in modules %}
+        <div>
+            <a href="./{{ module.module }}"> {{ module.ds }}</a>
+        </div>
+    {% endfor %}
+{% endblock %}
