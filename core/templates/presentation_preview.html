@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+    <h2>Por favor, revise los datos y pulse 'Enviar candidatura'</h2>
+    <form method="post" id="alta_candidato" enctype="multipart/form-data">
+        {% csrf_token %} {{ form.id }}
+        {% for f in form %}
+            <div class="tr">
+                <div class="th">{{ f.label_tag }}</div>
+                <div class="td">{{ f }}</div>
+            </div>
+        {% endfor %}
+        {% if candidate.dni %}
+            <div class="tr">
+                <div class="th">DNI/Pasaporte:</div>
+                <div class="td">Adjuntado correctamente</div>
+            </div>
+        {% endif %}
+        {% if candidate.photo %}
+            <div class="tr">
+                <div class="th">Foto:</div>
+                <div class="td"><img src="{{ candidato.foto.url }}"></div>
+            </div>
+        {% endif %}
+
+        <input type="submit" value="Enviar candidatura"/>
+        <input type="button" value="Volver y corregir" onclick="history.back();"/>
+    </form>
+{% endblock %}
