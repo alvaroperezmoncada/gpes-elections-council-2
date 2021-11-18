@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block body %}
+    <h2>Candidaturas provisionalmente válidas</h2>
+    {% for circ, candidatos in ccaa %}
+        {% if circ.pk != 18 %}
+            <h3>{{ circ }}</h3>
+        {% endif %}
+        <table class="alegaciones">
+            <thead>
+            </thead>
+            <tbody>
+            {% for candidato in candidatos %}
+                <tr>
+                    <td class="foto">{% if candidato.photo %}
+                        <img src="">{% endif %}</td>
+                    <td class="nombre">
+                        <div class="nombre">{{ candidato }}</div>
+                        <div>Localidad: {{ candidato.locality }}</div>
+                        <div>Antigüedad en la asociación: {{ candidato.filing_date|date:"Y" }}</div>
+                        <div>{{ candidato.description|linebreaks }}</div>
+                        {% if candidato.present_it %}
+                            <div>Presentado por {{ candidato.present_it }}</div> {% endif %}
+                    </td>
+                    <td class="cv">{{ candidato.curriculum_vitae|linebreaks }}</td>
+                    <td class="vinculacion">{{ candidato.bonding|linebreaks }}</td>
+                    <td class="vinculacion">{% if candidato.on_the_council %}
+                        Esta persona pertenece al Consejo en la actualidad y su participación ha sido la siguiente:
+                        {{ candidato.participation | linebreaks }}
+                    {% elif candidato.on_the_council == False %}
+                        Esta persona no pertenece al Consejo en la actualidad
+                    {% else %}
+                        Información pendiente de complementar
+                    {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+    <h2>Candidaturas provisionalmente no válidas</h2>
+    <table class="alegaciones">
+        <thead>
+        </thead>
+        <tbody>
+        {% for candidato in not_valid_candidate %}
+            <tr>
+                <td class="nombrelargo">
+                    <div class="nombre">{{ candidato }}</div>
+                </td>
+                <td class="comentarios">{{ candidato.comments }}</td>
+                <td class="alegar"><a href="/alegar/{{ candidato.pk }}/">presentar alegación</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

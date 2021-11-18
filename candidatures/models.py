@@ -4,13 +4,13 @@ from django.db import models
 
 # Create your models here.
 class Candidature(models.Model):
-    filing_date = models.DateTimeField(auto_now=True, verbose_name=u'Fecha presentación candidatura')
+    filing_date = models.DateTimeField(auto_now=True, verbose_name='Fecha presentación candidatura')
     announcement = models.IntegerField(verbose_name='Convocatoria (0=No confirmada)', default=0)
     firstname = models.CharField(max_length=100, verbose_name='Nombre')
     lastname = models.CharField(max_length=100, verbose_name='Apellidos')
     presents_it = models.ForeignKey(
         'council_member.CouncilMember', null=True, related_name='candidature_council_member_set',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE, verbose_name='¿Quien lo presenta?'
     )
     partner_number = models.CharField(max_length=20, verbose_name='Nº de socio/a', null=True)
     locality = models.CharField(max_length=200, verbose_name='Localidad')
@@ -18,7 +18,7 @@ class Candidature(models.Model):
         'circumscription.Circumscription', on_delete=models.CASCADE, verbose_name='Circunscripción',
         related_name='candidature_circumscription_set'
     )
-    seniority_date = models.DateTimeField(null=True, verbose_name='Fecha antigüedad')
+    seniority_date = models.DateField(null=True, verbose_name='Fecha antigüedad')
     description = models.TextField(
         max_length=150, blank=True, validators=[MaxLengthValidator(150)],
         verbose_name='Breve descripción -máximo 150 caracteres'
@@ -36,11 +36,16 @@ class Candidature(models.Model):
         verbose_name='Motivación para presentar la candidatura -máximo 1.000 caracteres'
     )
     campaign = models.TextField(
-        max_length=1000, blank=True, validators=[MaxLengthValidator(1000)], verbose_name='Campaña'
+        max_length=1000, blank=True, validators=[MaxLengthValidator(1000)],
+        verbose_name='¿Qué cambios te gustaría ver en Greenpeace en los próximos tres años? -máximo 1.000 caracteres'
     )
     dni = models.FileField(upload_to="%Y/%m/%d", verbose_name='Copia del DNI/ Pasaporte/ Tarjeta de residente')
     dni_number = models.CharField(
         max_length=100, verbose_name='Número y letra del DNI/ Pasaporte/ Tarjeta de residente'
+    )
+    presents_it_dni = models.FileField(
+        upload_to="%Y/%m/%d", null=True,
+        verbose_name='Miembro del Consejo que presenta al candidato/a: Copia del DNI/ Pasaporte/ Tarjeta de residente',
     )
     photo = models.ImageField(upload_to="%Y/%m/%d", verbose_name=u'Foto -máximo 200kB-', null=True, blank=True)
     email = models.EmailField(
@@ -68,7 +73,7 @@ class Candidature(models.Model):
     participation = models.TextField(
         max_length=300, blank=True, validators=[MaxLengthValidator(300)], verbose_name='Participación'
     )
-    
+
     def __str__(self):
         return f'{self.firstname} {self.lastname}'
 

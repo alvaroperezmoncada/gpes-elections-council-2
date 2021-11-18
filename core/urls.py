@@ -16,13 +16,22 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from candidatures.views import presentation60_view, confirm60_view, ok60
+from candidatures.views import presentation60_view, confirm60_view, ok60, presentation15_view, confirm15_view, ok15, \
+    allegation60, allegation15, allegate, allegation_ok, view_candidatures60
 
 urlpatterns = [
     path('', include('admin.urls')),
     path('presentacion_60', presentation60_view),
+    path('presentacion_15', presentation15_view),
     path('confirmar_60', confirm60_view),
+    path('confirmar_15', confirm15_view),
     path('ok_60', ok60),
+    path('ok_15', ok15),
+    path('alegaciones_60', allegation60),
+    path('alegaciones_15', allegation15),
+    path('ver_candidaturas_60/', view_candidatures60),
+    path('alegar/<int:num>/', allegate),
+    path('alegacion_ok/', allegation_ok),
     path('admin/', admin.site.urls),
     path('authenticate/', include('authenticate.urls')),
 ]

@@ -5,4 +5,7 @@ from admin.utils import get_active_modules
 
 
 def index_view(request):
-    return render(request, 'select_module.html', context={'modules': get_active_modules(request)})
+    active_modules = get_active_modules(request)
+    if active_modules.count() == 0:
+        return render(request, 'deadlines.html')
+    return render(request, 'select_module.html', context={'modules': active_modules})
