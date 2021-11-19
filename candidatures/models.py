@@ -10,7 +10,7 @@ class Candidature(models.Model):
     lastname = models.CharField(max_length=100, verbose_name='Apellidos')
     presents_it = models.ForeignKey(
         'council_member.CouncilMember', null=True, related_name='candidature_council_member_set',
-        on_delete=models.CASCADE, verbose_name='¿Quien lo presenta?'
+        on_delete=models.CASCADE, verbose_name='¿Quien lo presenta?', blank=True
     )
     partner_number = models.CharField(max_length=20, verbose_name='Nº de socio/a', null=True)
     locality = models.CharField(max_length=200, verbose_name='Localidad')
@@ -18,7 +18,7 @@ class Candidature(models.Model):
         'circumscription.Circumscription', on_delete=models.CASCADE, verbose_name='Circunscripción',
         related_name='candidature_circumscription_set'
     )
-    seniority_date = models.DateField(null=True, verbose_name='Fecha antigüedad')
+    seniority_date = models.DateField(null=True, verbose_name='Fecha antigüedad', blank=True)
     description = models.TextField(
         max_length=150, blank=True, validators=[MaxLengthValidator(150)],
         verbose_name='Breve descripción -máximo 150 caracteres'
@@ -44,7 +44,7 @@ class Candidature(models.Model):
         max_length=100, verbose_name='Número y letra del DNI/ Pasaporte/ Tarjeta de residente'
     )
     presents_it_dni = models.FileField(
-        upload_to="%Y/%m/%d", null=True,
+        upload_to="%Y/%m/%d", null=True, blank=True,
         verbose_name='Miembro del Consejo que presenta al candidato/a: Copia del DNI/ Pasaporte/ Tarjeta de residente',
     )
     photo = models.ImageField(upload_to="%Y/%m/%d", verbose_name=u'Foto -máximo 200kB-', null=True, blank=True)
