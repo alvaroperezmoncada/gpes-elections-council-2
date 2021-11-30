@@ -6,7 +6,7 @@ from circumscription.models import Circumscription
 
 
 class CandidatureAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'circumscription', 'validated', 'filing_date', 'announcement')
+    list_display = ('__str__', 'circumscription', 'validated', 'seniority_date', 'announcement')
 
 
 admin.site.register(Candidature, CandidatureAdmin)

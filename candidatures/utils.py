@@ -42,7 +42,7 @@ def confirm(request, _type):
 
 def allegation(request, _type):
     candidate = Candidature.objects.filter(announcement=_type)
-    valid_candidate = candidate.filter(validated=True).order_by('circumscription', 'filing_date')
+    valid_candidate = candidate.filter(validated=True).order_by('circumscription', 'seniority_date')
     not_valid_candidate = candidate.exclude(validated=True).order_by('lastname', 'firstname')
 
     ccaa = [(k, list(v)) for (k, v) in groupby(valid_candidate, lambda x: x.circumscription)]
@@ -52,7 +52,7 @@ def allegation(request, _type):
 
 def view_candidatures(request, _type):
     candidates = Candidature.objects.filter(announcement=_type)
-    valid_candidates = candidates.filter(validated=True).order_by('circumscription', 'filing_date')
+    valid_candidates = candidates.filter(validated=True).order_by('circumscription', 'seniority_date')
     ccaa = [(k, list(v)) for (k, v) in groupby(valid_candidates, lambda x: x.circumscription)]
     context = {'ccaa': ccaa}
     return render(request, 'view_candidatures.html', context=context)

@@ -49,7 +49,6 @@ def view_candidatures15(request):
 
 
 def allegate(request, num):
-    print('Entra a alegar', num)
     candidate = Candidature.objects.get(pk=num)
     if request.method == 'POST':
         form = AllegationForm(request.POST)

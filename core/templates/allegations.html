@@ -16,7 +16,7 @@
                     <td class="nombre">
                         <div class="nombre">{{ candidato }}</div>
                         <div>Localidad: {{ candidato.locality }}</div>
-                        <div>Antigüedad en la asociación: {{ candidato.filing_date|date:"Y" }}</div>
+                        <div>Antigüedad en la asociación: {{ candidato.seniority_date|date:"Y" }}</div>
                         <div>{{ candidato.description|linebreaks }}</div>
                         {% if candidato.present_it %}
                             <div>Presentado por {{ candidato.present_it }}</div> {% endif %}

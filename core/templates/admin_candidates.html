@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+    <h2>Candidaturas provisionalmente válidas</h2>
+    {% for circ, candidatos in ccaa %}
+        {% if circ.pk != 18 %}
+            <h3>{{ circ }}</h3>
+        {% endif %}
+
+        {% for candidato in candidatos %}
+            <p>
+            <p class="foto">
+                {% if candidato.photo %}-ñ.
+                    {% if full %}
+                        <img src="{{ candidato.photo.url }}">
+                    {% else %}
+                        <img src="{{ candidato.photo }}">
+                    {% endif %}
+                {% endif %}
+            </p>
+
+            <p class="nombre"><span class="nombre"><a href="./{{ candidato.id }}/">{{ candidato }}</a></span>
+                <span><a href="mailto:{{ candidato.email }}">{{ candidato.email }}</a></span>
+                <span>Localidad: {{ candidato.locality }}</span>
+                {% if candidato.present_it %} <p>Presentado por {{ candidato.present_it }} {% endif %}
+                </p>
+            <p>Antigüedad en la asociación: {{ candidato.seniority_date|date:"Y" }}</p>
+
+            <h4>cv</h4>
+            <p class="cv">{{ candidato.curriculum_vitae|linebreaks }}</p>
+            <h4>vinculacion</h4>
+            <p class="vinculacion">{{ candidato.bonding|linebreaks }}</p>
+            <h4>motivación</h4>
+            <p class="motivacion">{{ candidato.motivation|linebreaks }}</p>
+            <h4>Campaña sugerida</h4>
+            <p class="campanha">{{ candidato.campaign|linebreaks }}</p>
+            <p class="participacion_activa">{{ candidato.active_participation  | yesno:"☑,☐,?" }} Participación
+                activa</p>
+            <p class="veracidad">{{ candidato.veracity  | yesno:"☑,☐,?" }} Fe de veracidad</p>
+            <p class="en_el_consejo">{{ candidato.on_the_council | yesno:"☑,☐,?" }} En el Consejo actualmente</p>
+            {% if candidato.on_the_council %}
+                <p class="vinculacion">Participación: {{ candidato.participation }}</p>
+            {% endif %}
+        {% endfor %}
+
+    {% endfor %}
+    <h2>Candidaturas provisionalmente no válidas</h2>
+    <table class="alegaciones">
+        <thead>
+        </thead>
+        <tbody>
+        {% for candidato in not_valid_candidates %}
+            <tr>
+                <td class="foto">{% if candidato.photo %}<img src="{{ candidato.photo }}">{% endif %}
+                </td>
+                <td class="nombrelargo">
+                    <div class="nombre"><a href="./{{ candidato.id }}/">{{ candidato }}</a></div>
+                    <a href="mailto:{{ candidato.email }}">{{ candidato.email }}</a>
+                </td>
+                <td class="comentarios">{{ candidato.comments }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
