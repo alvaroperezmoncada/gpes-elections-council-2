@@ -14,8 +14,7 @@ def get_contact(email, dni_number, return_list=False):
     limit = 100 if return_list else 2
     ret = []
     sf_conn = Salesforce(
-        username='jeisson@datasocial.es', password='J31550n15mp', security_token='MxFFiAcaSUWGNrgaUCu8Jm16a',
-        domain='test'
+
     )
     response = sf_conn.query(
         f"""
