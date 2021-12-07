@@ -11,24 +11,11 @@ class MultipleContactsError(RuntimeError):
 
 
 def get_contact(email, dni_number, return_list=False):
-    limit = 100 if return_list else 2
+    limit = 100 if return_list else 1
     ret = []
     sf_conn = Salesforce(
 
     )
-    response = sf_conn.query(
-        f"""
-       SELECT {','.join(params)}
-       FROM Contact
-       WHERE Email = '{email}' AND s360a__ContactCodes__c = 'Donor Prospect'
-       LIMIT {limit}
-       """
-    )
-    objects = response['records']
-    if len(objects) == 1 and not return_list:
-        return objects[0]
-    else:
-        ret += objects
 
     response = sf_conn.query(
         f"""
@@ -40,20 +27,6 @@ def get_contact(email, dni_number, return_list=False):
     )
     objects = response['records']
     if len(objects) == 1 and not return_list:
-        return objects[0]
-    else:
-        ret += objects
-
-    response = sf_conn.query(
-        f"""
-           SELECT {','.join(params)}
-           FROM Contact
-           WHERE DNI__c = '{dni_number}' AND s360a__ContactCodes__c = 'Donor Prospect' AND Email = '{email}'
-           LIMIT {limit}
-           """
-    )
-    objects = response['records']
-    if len(objects) == 1:
         return objects[0]
     else:
         ret += objects

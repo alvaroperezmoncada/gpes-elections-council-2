@@ -45,7 +45,7 @@ def edit_candidate(request, _type, _id):
         form = AdminCandidateForm(request.POST, request.FILES, instance=candidate)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(f'comision_{_type}')
+            return HttpResponseRedirect(f'/comision_{_type}/')
         info = {'info': 'Se han detectado errores'}
 
     else:

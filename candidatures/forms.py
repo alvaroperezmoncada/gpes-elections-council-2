@@ -18,7 +18,7 @@ class NewCandidatureConfirmForm(ModelForm):
         model = Candidature
         fields = [
             'firstname', 'lastname', 'locality', 'circumscription', 'curriculum_vitae', 'bonding', 'motivation',
-            'campaign', 'email'
+            'campaign', 'dni_number', 'email'
         ]
 
 

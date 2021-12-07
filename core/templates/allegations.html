@@ -32,6 +32,7 @@
                         Información pendiente de complementar
                     {% endif %}
                     </td>
+                    <td class="alegar"><a href="/alegar/{{ candidato.pk }}/">Presentar alegación</a></td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -48,7 +49,7 @@
                     <div class="nombre">{{ candidato }}</div>
                 </td>
                 <td class="comentarios">{{ candidato.comments }}</td>
-                <td class="alegar"><a href="/alegar/{{ candidato.pk }}/">presentar alegación</a></td>
+
             </tr>
         {% endfor %}
         </tbody>
