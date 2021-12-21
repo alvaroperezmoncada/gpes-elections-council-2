@@ -38,20 +38,5 @@
             </tbody>
         </table>
     {% endfor %}
-    <h2>Candidaturas provisionalmente no válidas</h2>
-    <table class="alegaciones">
-        <thead>
-        </thead>
-        <tbody>
-        {% for candidato in not_valid_candidate %}
-            <tr>
-                <td class="nombrelargo">
-                    <div class="nombre">{{ candidato }}</div>
-                </td>
-                <td class="comentarios">{{ candidato.comments }}</td>
 
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 {% endblock %}

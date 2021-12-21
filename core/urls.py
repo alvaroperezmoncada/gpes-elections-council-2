@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from admin.views import commision60, edit_candidate60, commision15, edit_candidate15
+from admin.views import commision60, edit_candidate60, commision15, edit_candidate15, vote60
 from candidatures.views import presentation60_view, confirm60_view, ok60, presentation15_view, confirm15_view, ok15, \
     allegation60, allegation15, allegate, allegation_ok, view_candidatures60, view_candidatures15
 
@@ -38,7 +38,7 @@ urlpatterns = [
     path('comision_60/<int:num>/', edit_candidate60),
     path('comision_15/', commision15),
     path('comision_15/<int:num>/', edit_candidate15),
+    path('votacion_60/', vote60),
     path('admin/', admin.site.urls),
     path('authenticate/', include('authenticate.urls')),
 ]
-

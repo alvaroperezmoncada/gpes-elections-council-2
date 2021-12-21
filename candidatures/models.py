@@ -69,6 +69,7 @@ class Candidature(models.Model):
     allegations = models.TextField(
         max_length=1000, blank=True, validators=[MaxLengthValidator(1000)], verbose_name='Alegaciones'
     )
+    is_allegate = models.BooleanField(default=False, verbose_name='Tiene alegaciones')
     on_the_council = models.BooleanField(default=False, verbose_name='Actualmente en el Consejo')
     participation = models.TextField(
         max_length=300, blank=True, validators=[MaxLengthValidator(300)], verbose_name='Participación'

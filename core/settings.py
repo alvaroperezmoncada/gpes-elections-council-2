@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'circumscription.apps.DistrictsConfig',
     'provinces.apps.ProvincesConfig',
     'council_member.apps.CouncilMemberConfig',
-    'deadlines.apps.DeadlinesConfig'
+    'deadlines.apps.DeadlinesConfig',
+    'associate.apps.AssociateConfig'
 
 ]
 

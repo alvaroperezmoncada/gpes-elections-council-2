@@ -1,7 +1,8 @@
 from django.shortcuts import render
 
 # Create your views here.
-from admin.utils import get_active_modules, commision, edit_candidate
+from admin.utils import get_active_modules, commision, edit_candidate, vote
+from associate.models import Associate
 
 
 def index_view(request):
@@ -25,3 +26,7 @@ def edit_candidate60(request, num):
 
 def edit_candidate15(request, num):
     return edit_candidate(request, 15, num)
+
+
+def vote60(request):
+    return vote(request, 60, Associate)

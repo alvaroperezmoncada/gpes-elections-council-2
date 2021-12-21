@@ -1,5 +1,6 @@
 from itertools import groupby
 
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils import timezone
@@ -8,6 +9,7 @@ from django.utils.dateparse import parse_date
 from admin.forms import AdminCandidateForm
 from admin.salesforce import get_contact
 from candidatures.models import Candidature
+from circumscription.models import Circumscription
 from core import settings
 from deadlines.models import Deadline
 from provinces.models import Province
@@ -73,9 +75,9 @@ def edit_candidate(request, _type, _id):
                     circunscripcion_por_cp = Province.objects.get(prefix_cp=prefijo).circumscription
                     candidate.validated_circumscription = candidate.circumscription == circunscripcion_por_cp
                     candidate.save()
+
                 candidate.validated_by_system = (
-                        candidate.up_to_date is True and candidate.validated_by_system is True
-                        and candidate.is_adult is True and candidate.antiquity_3_years is True
+                        candidate.is_adult is True and candidate.antiquity_3_years is True
                 )
                 candidate.save()
             else:
@@ -84,3 +86,28 @@ def edit_candidate(request, _type, _id):
 
     context = {'candidato': candidate, 'form': form, 'info': info}
     return render(request, 'edit_candidates.html', context)
+
+
+def vote(request, _type, voting_class):
+    if request.method != 'POST':
+        return render(request, 'vote.html', context={'tipo': _type})
+    password = request.POST['clave']
+    try:
+        member = voting_class.objects.get(password=password)
+    except voting_class.DoesNotExist:
+        message = 'Verifique el identificador, por favor'
+        messages.add_message(request, messages.INFO, message)
+        return render(request, 'vote.html', context={'tipo': _type})
+
+    can_vote, msg = member.can_vote()
+    if not can_vote:
+        messages.add_message(request, messages.WARNING, u'No puede votar: %s' % msg)
+        return HttpResponseRedirect('/')
+
+    request.session['usu%s' % _type] = member.pk
+    if _type == 15:
+        return HttpResponseRedirect('/papeleta_%s/%s/' % (_type, 18))
+    if _type == 60 and member.circunscripcion.pk != 18:
+        return HttpResponseRedirect('/papeleta_%s/%s/' % (_type, member.circumscription.pk))
+    else:
+        return render(request, 'selector_usu.html', dict(tipo=_type, ccaa=Circumscription.objects.all()))

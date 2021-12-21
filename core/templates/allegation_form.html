@@ -4,6 +4,10 @@
     <h3>Introduce tu alegación para la candidatura de {{ candidate }}</h3>
     <div>{{ form.alegacion.errors }}</div>
     <form method="post">
+        <div>
+            <div>DNI de quien alega</div>
+            {{ form.dni_number }}
+        </div>
         {{ form.alegacion }}
         {% csrf_token %}
         <input type="submit" value="enviar"/>
