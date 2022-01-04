@@ -1,16 +1,22 @@
+import datetime
 from itertools import groupby
 
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.mail import send_mail
+from django.core.validators import EmailValidator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.dateparse import parse_date
 
 from admin.forms import AdminCandidateForm
-from admin.salesforce import get_contact
+from admin.salesforce import get_contact, MultipleContactsError
+from associate.models import Associate
 from candidatures.models import Candidature
 from circumscription.models import Circumscription
 from core import settings
+from council_member.models import CouncilMember
 from deadlines.models import Deadline
 from provinces.models import Province
 
@@ -21,6 +27,10 @@ def get_active_modules(request):
     if not request.user.is_superuser:
         queryset = queryset.filter(start_dt__lte=dt_now, end_dt__gte=dt_now)
     return queryset.values()
+
+
+def diff_month(d1, d2):
+    return (d1.year - d2.year) * 12 + d1.month - d2.month
 
 
 def commision(request, _type):
@@ -59,21 +69,28 @@ def edit_candidate(request, _type, _id):
                 if info['Income_ultimos_12_meses_CONSEJO__c'] >= settings.MIN_INCOME:
                     candidate.up_to_date = True
                     candidate.save()
+
                 if info['Birthdate']:
                     candidate.fecha_nacimiento = parse_date(info['Birthdate'])
                     if candidate.fecha_nacimiento <= settings.FECHA_MAXIMA_NACIMIENTO:
                         candidate.is_adult = True
                     candidate.save()
+
                 if info['Fecha_de_antiguedad__c']:
                     candidate.seniority_date = parse_date(info['Fecha_de_antiguedad__c'])
                     candidate.antiquity_3_years = candidate.seniority_date <= settings.FECHA_MAXIMA_ANTIGUEDAD
                     candidate.save()
+
                 if _type == 15:
                     candidate.validated_circumscription = True
                 elif info['MailingPostalCode']:
                     prefijo = info['MailingPostalCode'][:2]
                     circunscripcion_por_cp = Province.objects.get(prefix_cp=prefijo).circumscription
                     candidate.validated_circumscription = candidate.circumscription == circunscripcion_por_cp
+                    candidate.save()
+
+                if info['AlizeConstituentID__c']:
+                    candidate.partner_number = info['AlizeConstituentID__c']
                     candidate.save()
 
                 candidate.validated_by_system = (
@@ -107,7 +124,129 @@ def vote(request, _type, voting_class):
     request.session['usu%s' % _type] = member.pk
     if _type == 15:
         return HttpResponseRedirect('/papeleta_%s/%s/' % (_type, 18))
-    if _type == 60 and member.circunscripcion.pk != 18:
+    if _type == 60 and member.circumscription.pk != 18:
         return HttpResponseRedirect('/papeleta_%s/%s/' % (_type, member.circumscription.pk))
     else:
         return render(request, 'selector_usu.html', dict(tipo=_type, ccaa=Circumscription.objects.all()))
+
+
+def send_pass(request, _type):
+    if request.method != "POST":
+        return HttpResponseRedirect('/')
+
+    email = request.POST.get('email')
+    if not email:
+        return HttpResponseRedirect('/votacion_%s/' % _type)
+
+    msg = ''
+    if _type == 15:
+        try:
+            consejero = CouncilMember.objects.get(user__email=email)
+            email_text = u'Estimado/a %s\r\nÉsta es tu clave: %s\r\nPuedes votar en https://elecciones.greenpeace.es' % (
+                consejero.firstname, consejero.get_clave())
+            send_mail(u"[Greenpeace España/Elecciones] Clave para votar ", email_text, 'no-reply@greenpeace.es',
+                      [consejero.correo_electronico],
+                      fail_silently=False)
+            msg = u'Por favor, verifica tu buzón de correo. En breve te llegará un mensaje con la clave para votar.'
+            level = messages.SUCCESS
+        except ObjectDoesNotExist:
+            msg = u'''La votación está abierta solamente a los consejeros vigentes.
+                Verifica que tu dirección de correo es la activa de la lista del
+                Consejo'''
+            level = messages.WARNING
+        messages.add_message(request, level, msg)
+        return HttpResponseRedirect('/votacion_%s/' % _type)
+
+    try:
+        info = get_contact(email, email)  # TODO cambiar a dni
+        if info:
+            num_socio = info[u'AlizeConstituentID__c']
+            income = info['Income_ultimos_12_meses_CONSEJO__c']
+            fecha_alta = parse_date(info['Activation_Date__c'])
+            today = datetime.date.today()
+            meses_active = min(12, diff_month(today, fecha_alta))
+            # if income / meses_active < settings.MIN_INCOME / 12:
+            #     msg = u'''Parece que hay algún problema con el pago de tu cuota,
+            #     por favor, ponte en contacto con nuestra oficina, teléfono: 900 535 025,
+            #     correo electrónico:
+            #     <a href="mailto:sociasysocios.es@greenpeace.org">sociasysocios.es@greenpeace.org</a>.
+            #     Cuando esté resuelto, inténtalo de nuevo. Te esperamos.'''
+            if info['Birthdate']:
+                fecha_nacimiento = parse_date(info['Birthdate'])
+                if fecha_nacimiento > settings.FECHA_MAXIMA_NACIMIENTO:
+                    msg = u'''Para poder participar en estas elecciones necesitabas ser mayor de edad
+                    en el momento de la convocatoria. Te esperamos en las próximas elecciones'''
+            else:
+                msg = u'''Para poder votar necesitas tener fecha de nacimiento en la base de 
+                datos. Por favor, ponte en contacto con nuestra oficina, teléfono: 900 535 025, 
+                correo electrónico: sociasysocios.es@greenpeace.org o actualízala en
+                 Tu perfil greenpeace. Cuando esté resuelto, inténtalo de nuevo. Te esperamos.'''
+            try:
+                EmailValidator()(info['Email'])
+            except ValidationError:
+                msg = u'''Para poder votar electrónicamente, necesitamos que tengas una dirección de correo electrónico registrada en la base de datos de Greenpeace España para enviarte la clave. Por favor, ponte en contacto con nuestra oficina, teléfono: 900 535 025, correo electrónico: sociasysocios.es@greenpeace.org. Cuando esté resuelto, inténtalo de nuevo. Te esperamos.'''
+            if fecha_alta > settings.FECHA_CONVOCATORIA:
+                msg = u'''Para poder participar en estas elecciones necesitabas pertenecer a Greenpeace España en el momento de su convocatoria. Te esperamos en las próximas elecciones.'''
+            print(num_socio)
+            soc_local = Associate.objects.filter(associate_number=num_socio).exclude(voting_date=None).first()
+            if soc_local:
+                msg = u'''El sistema tiene registrado tu voto en {:%d-%m-%Y %H:%M}'''.format(soc_local.fecha_voto)
+        else:
+            msg = u'''No hay ninguna persona en nuestra base de datos que cumpla esta condición.
+            Por favor, ponte en contacto con nuestra oficina, teléfono: 900 535 025,
+            correo electrónico: <a href="mailto:sociasysocios.es@greenpeace.org">sociasysocios.es@greenpeace.org</a>.
+            Cuando esté resuelto, inténtalo de nuevo. Te esperamos.'''
+    except MultipleContactsError:
+        info = None
+        msg = u'''Hay más de una persona en nuestra base de datos que cumple esta
+        condición.Por favor, ponte en contacto con nuestra oficina,
+        teléfono: 900 535 025, correo electrónico: sociasysocios.es@greenpeace.org.
+        Cuando esté resuelto, inténtalo de nuevo. Te esperamos.'''
+
+    print('este es el mensaje', msg)
+
+    if msg == '':
+        socio, created = Associate.objects.get_or_create(associate_number=num_socio)
+        socio.email = info['Email']
+        socio.firstname = info['Name']
+        if info['MailingPostalCode']:
+            prefijo = info['MailingPostalCode'][:2]
+            try:
+                circunscripcion_por_cp = Province.objects.get(prefix_cp=prefijo).circumscription
+            except ObjectDoesNotExist:
+                circunscripcion_por_cp = Circumscription.objects.get(id=18)
+        else:
+            circunscripcion_por_cp = Circumscription.objects.get(id=18)
+        socio.circumscription = circunscripcion_por_cp
+        socio.save()
+        email_text = u'Estimado/a %s\r\nÉsta es tu clave: %s\r\nPuedes votar en https://elecciones.greenpeace.es' % (
+            socio.firstname, socio.get_clave())
+        send_mail(u"[Greenpeace España/Elecciones] Clave para votar ", email_text, 'no-reply@greenpeace.es',
+                  [socio.email],
+                  fail_silently=False)
+        msg = u'Por favor, verifica tu buzón de correo. En breve te llegará un mensaje con la clave para votar.'
+        level = messages.SUCCESS
+    else:
+        level = messages.WARNING
+    messages.add_message(request, level, msg)
+    return HttpResponseRedirect('/votacion_%s/' % _type)
+
+
+def ballot(request, ca, _type, voting_class):
+    usu = request.session.get('usu%s' % _type)
+    if not usu:
+        return HttpResponseRedirect("/")
+    socio = voting_class.objects.get(pk=usu)
+    can_vote, msg = socio.can_vote()
+    if not can_vote:
+        mensaje = u'No puede votar en esta web; intente votar por correo postal: ' + msg
+        messages.add_message(request, messages.SUCCESS, mensaje)
+        return render(request, 'message_pub.html')
+    circ = Circumscription.objects.get(pk=ca)
+    plantilla = 'ballot_pub.html'
+    if _type == 60:
+        max_candidatos = circ.places
+        assert socio.circumscription.pk == 18 or socio.circumscription == circ
+    else:
+        max_candidatos = settings.MAX_CANDIDATOS_15
+    return render(request, plantilla, locals())

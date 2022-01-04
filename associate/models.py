@@ -1,8 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
-
 # Create your models here.
+from associate.utils import claveAleatoria
+from core import settings
+
+
 class Associate(models.Model):
     firstname = models.CharField(max_length=200, null=True, blank=True, verbose_name='Nombre')
     lastname = models.CharField(max_length=200, null=True, blank=True, verbose_name='Apellidos')
@@ -33,6 +36,12 @@ class Associate(models.Model):
         if self.voting_date:
             return False, 'Ya se ha registrado un voto'
         return True, ''
+
+    def get_clave(self):
+        if not self.password or not len(self.password) == settings.LONGITUD_CLAVE:
+            self.password = claveAleatoria()
+            self.save()
+        return self.password
 
     class Meta:
         verbose_name = 'Socio'

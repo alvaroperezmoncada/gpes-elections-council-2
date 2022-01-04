@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+    {{ mensaje }}
+    <br/>
+    {% if not final %}
+        <a href="/">Volver a pantalla inicial</a>
+    {% endif %}
+{% endblock %}
