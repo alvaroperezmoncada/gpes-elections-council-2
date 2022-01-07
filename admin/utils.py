@@ -13,6 +13,7 @@ from django.utils.dateparse import parse_date
 from admin.forms import AdminCandidateForm
 from admin.salesforce import get_contact, MultipleContactsError
 from associate.models import Associate
+from ballot.models import Ballot, Vote
 from candidatures.models import Candidature
 from circumscription.models import Circumscription
 from core import settings
@@ -219,11 +220,11 @@ def send_pass(request, _type):
             circunscripcion_por_cp = Circumscription.objects.get(id=18)
         socio.circumscription = circunscripcion_por_cp
         socio.save()
-        email_text = u'Estimado/a %s\r\nÉsta es tu clave: %s\r\nPuedes votar en https://elecciones.greenpeace.es' % (
-            socio.firstname, socio.get_clave())
-        send_mail(u"[Greenpeace España/Elecciones] Clave para votar ", email_text, 'no-reply@greenpeace.es',
-                  [socio.email],
-                  fail_silently=False)
+        # email_text = u'Estimado/a %s\r\nÉsta es tu clave: %s\r\nPuedes votar en https://elecciones.greenpeace.es' % (
+        #     socio.firstname, socio.get_clave())
+        # send_mail(u"[Greenpeace España/Elecciones] Clave para votar ", email_text, 'no-reply@greenpeace.es',
+        #           [socio.email],
+        #           fail_silently=False)
         msg = u'Por favor, verifica tu buzón de correo. En breve te llegará un mensaje con la clave para votar.'
         level = messages.SUCCESS
     else:
@@ -250,3 +251,50 @@ def ballot(request, ca, _type, voting_class):
     else:
         max_candidatos = settings.MAX_CANDIDATOS_15
     return render(request, plantilla, locals())
+
+
+def register_vote(request, ca, _type, voting_class):
+    if request.method == "GET":
+        return HttpResponseRedirect('/')
+    id_usu = request.session.get('usu%s' % _type)
+    if not id_usu:
+        return HttpResponseRedirect("/")
+    circ = Circumscription.objects.get(pk=ca)
+    usu = voting_class.objects.get(pk=id_usu)
+    if _type == 60:
+        assert usu.circumscription == 18 or circ.pk == usu.circumscription_id, 'Se está votando por una circ no autorizada'
+    can_vote, msg = usu.can_vote(True)
+    if not can_vote:
+        messages.add_message(request, messages.WARNING, 'No puede votar: ' + msg)
+        return HttpResponseRedirect('/')
+    usu.voting_date = datetime.datetime.now()
+    usu.save()
+    papeleta = Ballot(circumscription=circ, user=request.user.is_authenticated() and request.user or None)
+    aspas = [int(v) for k, v in request.POST.items() if k.startswith('cdto')]
+    if _type == 60:
+        max_candidatos = circ.places
+    else:
+        max_candidatos = settings.MAX_CANDIDATOS_15
+    assert len(aspas) <= max_candidatos, u'No se puede votar a más candidatos que puestos'
+    if request.POST.get('nulo'):
+        assert not aspas, u'Aspas y nulo'
+        papeleta.null_vote = True
+        papeleta.blank_vote = False
+    elif request.POST.get('blanco'):
+        assert not aspas, u'Aspas y blanco'
+        papeleta.blank_vote = True
+        papeleta.null_vote = False
+    else:
+        assert aspas, u'Ni aspas ni blanco'
+        papeleta.blank_vote = False
+        papeleta.null_vote = False
+    papeleta.save()
+    for aspa in aspas:
+        candidato = Candidature.objects.get(pk=aspa)
+        # Sólo en caso de hostilidad
+        assert candidato.circumscription.pk == circ.pk, u'Se está votando por candidatos de otra papeleta'
+        voto = Vote(candidate=candidato, ballot=papeleta)
+        voto.save()
+    msg = u'<span style="font-size:300%;color:green;">Voto registrado</span>'
+    messages.add_message(request, messages.SUCCESS, msg)
+    return HttpResponseRedirect('/')

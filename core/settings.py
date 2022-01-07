@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'provinces.apps.ProvincesConfig',
     'council_member.apps.CouncilMemberConfig',
     'deadlines.apps.DeadlinesConfig',
-    'associate.apps.AssociateConfig'
+    'associate.apps.AssociateConfig',
+    'ballot.apps.BallotConfig'
 
 ]
 

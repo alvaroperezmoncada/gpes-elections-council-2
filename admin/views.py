@@ -38,3 +38,7 @@ def send_pass60(request):
 
 def ballot60(request, ca):
     return ballot(request, ca, 60, Associate)
+
+
+def register_vote60(request, ca):
+    return register_vote(request, ca, 60, Associate)

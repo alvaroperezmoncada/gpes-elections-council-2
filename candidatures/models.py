@@ -62,7 +62,7 @@ class Candidature(models.Model):
     antiquity_3_years = models.BooleanField(verbose_name='Antigüedad > 3 años', default=False)
     validated_by_system = models.BooleanField(verbose_name='Comprobada por el sistema', default=False)
     validated_circumscription = models.BooleanField(verbose_name='Circunscripción correcta', default=False)
-    validated = models.BooleanField(verbose_name='Validada por la Comisión Electoral', default=False)
+    validated = models.BooleanField(verbose_name='Validada', default=False)
     comments = models.TextField(
         max_length=1000, blank=True, validators=[MaxLengthValidator(1000)], verbose_name='Comentarios'
     )
