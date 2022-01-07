@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from admin.utils import get_active_modules, commision, edit_candidate, vote, send_pass, ballot
+from admin.utils import get_active_modules, commision, edit_candidate, vote, send_pass, ballot, register_vote
 from associate.models import Associate
 
 
