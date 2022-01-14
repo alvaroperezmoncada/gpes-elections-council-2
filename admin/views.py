@@ -1,7 +1,8 @@
 from django.shortcuts import render
 
 # Create your views here.
-from admin.utils import get_active_modules, commision, edit_candidate, vote, send_pass, ballot, register_vote
+from admin.utils import get_active_modules, commision, edit_candidate, vote, send_pass, ballot, register_vote, selector, \
+    results
 from associate.models import Associate
 
 
@@ -42,3 +43,11 @@ def ballot60(request, ca):
 
 def register_vote60(request, ca):
     return register_vote(request, ca, 60, Associate)
+
+
+def results60(request):
+    return results(request, 60)
+
+
+def selector60(request):
+    return selector(request, 60)

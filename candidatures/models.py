@@ -24,19 +24,19 @@ class Candidature(models.Model):
         verbose_name='Breve descripción -máximo 150 caracteres'
     )
     curriculum_vitae = models.TextField(
-        max_length=1000, blank=True, validators=[MaxLengthValidator(1000)],
+        max_length=1000, validators=[MaxLengthValidator(1000)],
         verbose_name='Currículum profesional -máximo 1.000 caracteres'
     )
     bonding = models.TextField(
-        max_length=1000, blank=True, validators=[MaxLengthValidator(1000)],
+        max_length=1000, validators=[MaxLengthValidator(1000)],
         verbose_name='Vinculación con Greenpeace -máximo 1.000 caracteres'
     )
     motivation = models.TextField(
-        max_length=1000, blank=True, validators=[MaxLengthValidator(1000)],
+        max_length=1000, validators=[MaxLengthValidator(1000)],
         verbose_name='Motivación para presentar la candidatura -máximo 1.000 caracteres'
     )
     campaign = models.TextField(
-        max_length=1000, blank=True, validators=[MaxLengthValidator(1000)],
+        max_length=1000, validators=[MaxLengthValidator(1000)],
         verbose_name='¿Qué cambios te gustaría ver en Greenpeace en los próximos tres años? -máximo 1.000 caracteres'
     )
     dni = models.FileField(upload_to="%Y/%m/%d", verbose_name='Copia del DNI/ Pasaporte/ Tarjeta de residente')
@@ -77,6 +77,9 @@ class Candidature(models.Model):
 
     def __str__(self):
         return f'{self.firstname} {self.lastname}'
+
+    def cuentaVotos(self):
+        return self.vote_candidate_set.count()
 
     class Meta:
         verbose_name = 'Candidatura'

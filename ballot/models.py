@@ -33,7 +33,7 @@ class Ballot(models.Model):
 
 class Vote(models.Model):
     candidate = models.ForeignKey(
-        'circumscription.Circumscription', on_delete=models.CASCADE, related_name='vote_candidate_set'
+        'candidatures.Candidature', on_delete=models.CASCADE, related_name='vote_candidate_set'
     )
     ballot = models.ForeignKey(Ballot, on_delete=models.CASCADE, related_name='vote_ballot_set')
 

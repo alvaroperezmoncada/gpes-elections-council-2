@@ -16,10 +16,10 @@ class Associate(models.Model):
         related_name='associate_circumscription_set', verbose_name='Circunscripción'
     )
     associate_dt = models.DateField(null=True, blank=True, verbose_name='Fecha antigüedad')
-    voting_date = models.DateTimeField(null=True, verbose_name='Fecha de votación')
-    birthday = models.DateTimeField(null=True, verbose_name='Fecha de nacimiento')
+    voting_date = models.DateTimeField(null=True, verbose_name='Fecha de votación', blank=True)
+    birthday = models.DateTimeField(null=True, verbose_name='Fecha de nacimiento', blank=True)
     circumscription_vote = models.ForeignKey(
-        'circumscription.Circumscription', on_delete=models.SET_NULL, null=True,
+        'circumscription.Circumscription', on_delete=models.SET_NULL, null=True, blank=True,
         related_name='associate_circumscription_vote_set', verbose_name='Circunscripción voto'
     )
     user = models.OneToOneField(

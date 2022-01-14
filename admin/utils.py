@@ -94,7 +94,7 @@ def edit_candidate(request, _type, _id):
                     candidate.partner_number = info['AlizeConstituentID__c']
                     candidate.save()
 
-                candidate.validated_by_system = (
+                candidate.validated_by_system = candidate.validated = (
                         candidate.is_adult is True and candidate.antiquity_3_years is True
                 )
                 candidate.save()
@@ -191,7 +191,7 @@ def send_pass(request, _type):
             print(num_socio)
             soc_local = Associate.objects.filter(associate_number=num_socio).exclude(voting_date=None).first()
             if soc_local:
-                msg = u'''El sistema tiene registrado tu voto en {:%d-%m-%Y %H:%M}'''.format(soc_local.fecha_voto)
+                msg = u'''El sistema tiene registrado tu voto en {:%d-%m-%Y %H:%M}'''.format(soc_local.voting_date)
         else:
             msg = u'''No hay ninguna persona en nuestra base de datos que cumpla esta condición.
             Por favor, ponte en contacto con nuestra oficina, teléfono: 900 535 025,
@@ -220,6 +220,7 @@ def send_pass(request, _type):
             circunscripcion_por_cp = Circumscription.objects.get(id=18)
         socio.circumscription = circunscripcion_por_cp
         socio.save()
+        socio.get_clave()
         # email_text = u'Estimado/a %s\r\nÉsta es tu clave: %s\r\nPuedes votar en https://elecciones.greenpeace.es' % (
         #     socio.firstname, socio.get_clave())
         # send_mail(u"[Greenpeace España/Elecciones] Clave para votar ", email_text, 'no-reply@greenpeace.es',
@@ -263,13 +264,13 @@ def register_vote(request, ca, _type, voting_class):
     usu = voting_class.objects.get(pk=id_usu)
     if _type == 60:
         assert usu.circumscription == 18 or circ.pk == usu.circumscription_id, 'Se está votando por una circ no autorizada'
-    can_vote, msg = usu.can_vote(True)
+    can_vote, msg = usu.can_vote()
     if not can_vote:
         messages.add_message(request, messages.WARNING, 'No puede votar: ' + msg)
         return HttpResponseRedirect('/')
     usu.voting_date = datetime.datetime.now()
     usu.save()
-    papeleta = Ballot(circumscription=circ, user=request.user.is_authenticated() and request.user or None)
+    papeleta = Ballot(circumscription=circ, user=request.user or None)
     aspas = [int(v) for k, v in request.POST.items() if k.startswith('cdto')]
     if _type == 60:
         max_candidatos = circ.places
@@ -298,3 +299,21 @@ def register_vote(request, ca, _type, voting_class):
     msg = u'<span style="font-size:300%;color:green;">Voto registrado</span>'
     messages.add_message(request, messages.SUCCESS, msg)
     return HttpResponseRedirect('/')
+
+
+def results(request, _type):
+    circumscription = Circumscription.objects.all()
+    ccaa = circumscription.exclude(pk=18) if _type == 60 else circumscription.filter(pk=18)
+    c = dict(ccaa=ccaa)
+    return render(request, 'results.html', c)
+
+
+def selector(request, _type):
+    circ_singular = Circumscription.objects.get(pk=18)
+    if _type == 15:
+        papeletas = Ballot.objects.filter(circumscription__id=18).order_by('-fecha_registro')[:5]
+        ccaa = Circumscription.objects.filter(id=18)
+    else:
+        papeletas = Ballot.objects.all().order_by('-fecha_registro')[:5]
+        ccaa = Circumscription.objects.all()
+    return render(request, 'selector.html', dict(ccaa=ccaa, papeletas=papeletas, tipo=_type))
