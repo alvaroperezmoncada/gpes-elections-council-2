@@ -5,7 +5,7 @@ from associate.models import Associate
 
 
 class AssociateAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user')
+    list_display = ('__str__',)
 
 
 admin.site.register(Associate, AssociateAdmin)

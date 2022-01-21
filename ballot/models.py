@@ -19,7 +19,7 @@ class Ballot(models.Model):
     null_vote = models.BooleanField(verbose_name='Voto nulo')
 
     def __str__(self):
-        return f'{self.circumscription} {self.user} {self.voting_date}'
+        return f'{self.circumscription} '
 
     def listaCandidatos(self):
         ret = list(self.vote_ballot_set.all())
@@ -42,4 +42,4 @@ class Vote(models.Model):
         verbose_name_plural = 'Votos'
 
     def __str__(self):
-        return u'%s %s' % (self.candidate, self.ballot)
+        return u'%s - %s' % (self.candidate, self.ballot)
