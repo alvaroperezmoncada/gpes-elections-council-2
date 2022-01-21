@@ -163,9 +163,10 @@ def send_pass(request, _type):
         if info:
             num_socio = info[u'AlizeConstituentID__c']
             income = info['Income_ultimos_12_meses_CONSEJO__c']
-            fecha_alta = parse_date(info['Activation_Date__c'])
+            print(info['Activation_Date__c'])
+            # fecha_alta = parse_date(info['Activation_Date__c'])
             today = datetime.date.today()
-            meses_active = min(12, diff_month(today, fecha_alta))
+            # meses_active = min(12, diff_month(today, fecha_alta))
             # if income / meses_active < settings.MIN_INCOME / 12:
             #     msg = u'''Parece que hay algún problema con el pago de tu cuota,
             #     por favor, ponte en contacto con nuestra oficina, teléfono: 900 535 025,
@@ -186,8 +187,8 @@ def send_pass(request, _type):
                 EmailValidator()(info['Email'])
             except ValidationError:
                 msg = u'''Para poder votar electrónicamente, necesitamos que tengas una dirección de correo electrónico registrada en la base de datos de Greenpeace España para enviarte la clave. Por favor, ponte en contacto con nuestra oficina, teléfono: 900 535 025, correo electrónico: sociasysocios.es@greenpeace.org. Cuando esté resuelto, inténtalo de nuevo. Te esperamos.'''
-            if fecha_alta > settings.FECHA_CONVOCATORIA:
-                msg = u'''Para poder participar en estas elecciones necesitabas pertenecer a Greenpeace España en el momento de su convocatoria. Te esperamos en las próximas elecciones.'''
+            # if fecha_alta > settings.FECHA_CONVOCATORIA:
+            #     msg = u'''Para poder participar en estas elecciones necesitabas pertenecer a Greenpeace España en el momento de su convocatoria. Te esperamos en las próximas elecciones.'''
             print(num_socio)
             soc_local = Associate.objects.filter(associate_number=num_socio).exclude(voting_date=None).first()
             if soc_local:

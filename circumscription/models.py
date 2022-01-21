@@ -45,6 +45,8 @@ class Circumscription(models.Model):
         ret.sort(key=lambda c: (-c.cuentaVotos(), c.seniority_date))
         for n, c in enumerate(ret):
             c.electo = (n < (self.places or 15) and c.cuentaVotos())
+        for c in ret:
+            print(c.electo, c.firstname, c.cuentaVotos())
         return ret
 
     def candidatos_ordenados_60(self):
