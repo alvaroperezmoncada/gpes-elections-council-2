@@ -271,7 +271,7 @@ def register_vote(request, ca, _type, voting_class):
         return HttpResponseRedirect('/')
     usu.voting_date = datetime.datetime.now()
     usu.save()
-    papeleta = Ballot(circumscription=circ, user=request.user or None)
+    papeleta = Ballot(circumscription=circ)
     aspas = [int(v) for k, v in request.POST.items() if k.startswith('cdto')]
     if _type == 60:
         max_candidatos = circ.places
