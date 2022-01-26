@@ -55,7 +55,7 @@ def allegate(request, num):
         if form.is_valid():
             msg = f'Presentada por DNI: {form.cleaned_data["dni_number"]}: '
             candidate.allegations += '\r\n\r\n' + msg + form.cleaned_data['alegacion']
-            candidate.is_allegate = False
+            candidate.is_allegate = True
             candidate.validated = False
             candidate.save()
             return HttpResponseRedirect('/alegacion_ok/')
