@@ -189,7 +189,6 @@ def send_pass(request, _type):
                 msg = u'''Para poder votar electrónicamente, necesitamos que tengas una dirección de correo electrónico registrada en la base de datos de Greenpeace España para enviarte la clave. Por favor, ponte en contacto con nuestra oficina, teléfono: 900 535 025, correo electrónico: sociasysocios.es@greenpeace.org. Cuando esté resuelto, inténtalo de nuevo. Te esperamos.'''
             # if fecha_alta > settings.FECHA_CONVOCATORIA:
             #     msg = u'''Para poder participar en estas elecciones necesitabas pertenecer a Greenpeace España en el momento de su convocatoria. Te esperamos en las próximas elecciones.'''
-            print(num_socio)
             soc_local = Associate.objects.filter(associate_number=num_socio).exclude(voting_date=None).first()
             if soc_local:
                 msg = u'''El sistema tiene registrado tu voto en {:%d-%m-%Y %H:%M}'''.format(soc_local.voting_date)
@@ -221,12 +220,12 @@ def send_pass(request, _type):
             circunscripcion_por_cp = Circumscription.objects.get(id=18)
         socio.circumscription = circunscripcion_por_cp
         socio.save()
-        # socio.get_clave()
-        email_text = u'Estimado/a %s\r\nÉsta es tu clave: %s' % (
-            socio.firstname, socio.get_clave())
-        send_mail(u"[Greenpeace España/Elecciones] Clave para votar ", email_text, 'no-reply@greenpeace.es',
-                  [socio.email],
-                  fail_silently=False)
+        socio.get_clave()
+        # email_text = u'Estimado/a %s\r\nÉsta es tu clave: %s' % (
+        #     socio.firstname, socio.get_clave())
+        # send_mail(u"[Greenpeace España/Elecciones] Clave para votar ", email_text, 'no-reply@greenpeace.es',
+        #           [socio.email],
+        #           fail_silently=False)
         msg = u'Por favor, verifica tu buzón de correo. En breve te llegará un mensaje con la clave para votar.'
         level = messages.SUCCESS
     else:
