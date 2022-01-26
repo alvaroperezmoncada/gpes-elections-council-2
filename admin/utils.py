@@ -221,12 +221,12 @@ def send_pass(request, _type):
             circunscripcion_por_cp = Circumscription.objects.get(id=18)
         socio.circumscription = circunscripcion_por_cp
         socio.save()
-        socio.get_clave()
-        # email_text = u'Estimado/a %s\r\nÉsta es tu clave: %s\r\nPuedes votar en https://elecciones.greenpeace.es' % (
-        #     socio.firstname, socio.get_clave())
-        # send_mail(u"[Greenpeace España/Elecciones] Clave para votar ", email_text, 'no-reply@greenpeace.es',
-        #           [socio.email],
-        #           fail_silently=False)
+        # socio.get_clave()
+        email_text = u'Estimado/a %s\r\nÉsta es tu clave: %s\r\nPuedes votar en https://elecciones.greenpeace.es' % (
+            socio.firstname, socio.get_clave())
+        send_mail(u"[Greenpeace España/Elecciones] Clave para votar ", email_text, 'no-reply@greenpeace.es',
+                  [socio.email],
+                  fail_silently=False)
         msg = u'Por favor, verifica tu buzón de correo. En breve te llegará un mensaje con la clave para votar.'
         level = messages.SUCCESS
     else:
