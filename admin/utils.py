@@ -210,23 +210,25 @@ def send_pass(request, _type):
         socio, created = Associate.objects.get_or_create(associate_number=num_socio)
         socio.email = info['Email']
         socio.firstname = info['Name']
-        # if info['MailingPostalCode']:
-        #     prefijo = info['MailingPostalCode'][:2]
-        #     try:
-        #         circunscripcion_por_cp = Province.objects.get(prefix_cp=prefijo).circumscription
-        #     except ObjectDoesNotExist:
-        #         circunscripcion_por_cp = Circumscription.objects.get(id=18)
-        # else:
-        #     circunscripcion_por_cp = Circumscription.objects.get(id=18)
-        # socio.circumscription = circunscripcion_por_cp
+        if info['MailingPostalCode']:
+            prefijo = info['MailingPostalCode'][:2]
+            try:
+                circunscripcion_por_cp = Province.objects.get(prefix_cp=prefijo).circumscription
+            except ObjectDoesNotExist:
+                circunscripcion_por_cp = Circumscription.objects.get(id=18)
+        else:
+            circunscripcion_por_cp = Circumscription.objects.get(id=18)
+        socio.circumscription = circunscripcion_por_cp
         socio.save()
         # socio.get_clave()
         email_text = u'Estimado/a %s\r\nÉsta es tu clave: %s' % (
             socio.firstname, socio.get_clave())
-        send_mail(u"[Greenpeace España/Elecciones] Clave para votar ", email_text, 'no-reply@greenpeace.es',
-                  [socio.email],
-                  fail_silently=False)
-        msg = u'Por favor, verifica tu buzón de correo. En breve te llegará un mensaje con la clave para votar.'
+        send_mail(
+            u"[Greenpeace España/Elecciones] Clave para votar ", email_text, 'no-reply@greenpeace.es', [socio.email],
+            fail_silently=False
+        )
+        msg = f'Se enviará la clave al correo {info["Email"]}, si desea actualizar el correo acceder en la Web ' \
+              f'de Greenpeace a Mi Perfil https://miperfil.greenpeace.es/'
         level = messages.SUCCESS
     else:
         level = messages.WARNING
@@ -248,7 +250,7 @@ def ballot(request, ca, _type, voting_class):
     plantilla = 'ballot_pub.html'
     if _type == 60:
         max_candidatos = circ.places
-        assert socio.circumscription.pk == 18 or socio.circumscription == circ
+        assert socio.circumscription.pk == 19 or socio.circumscription == circ
     else:
         max_candidatos = settings.MAX_CANDIDATOS_15
     return render(request, plantilla, locals())

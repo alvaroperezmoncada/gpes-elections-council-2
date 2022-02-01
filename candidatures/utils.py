@@ -1,9 +1,11 @@
 from itertools import groupby
 
+from django.contrib import messages
 from django.forms import Select
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
+from admin.salesforce import check_dni_salesforce
 from candidatures.forms import NewCandidatureForm, NewCandidatureConfirmForm, NewCandidature15Form
 from candidatures.models import Candidature
 
@@ -13,6 +15,16 @@ def presentation(request, _type):
     if request.method == 'POST':
         form = form(request.POST, request.FILES)
         if form.is_valid():
+            if not check_dni_salesforce(request.POST.get('dni_number')):
+                message = 'El DNI introducido no corresponde a ningún socio en activo, se puede actualizar en ' \
+                          'la WEB de Greenpeace en Mi Perfil https://miperfil.greenpeace.es/'
+                messages.add_message(request, messages.WARNING, message)
+                return render(request, 'presentation.html', {'form': form})
+
+            if Candidature.objects.filter(dni_number=request.POST.get('dni_number')).count() > 0:
+                message = 'El DNI ya se encuentra registrado'
+                messages.add_message(request, messages.ERROR, message)
+                return render(request, 'presentation.html', {'form': form})
             candidate = form.save()
             request.session['candidate_id'] = candidate.id
             return HttpResponseRedirect(f'confirmar_{_type}')

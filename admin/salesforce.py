@@ -10,6 +10,11 @@ class MultipleContactsError(RuntimeError):
     pass
 
 
+def check_dni_salesforce(dni):
+    info = get_contact(dni, dni)
+    return info
+
+
 def get_contact(email, dni_number, return_list=False):
     limit = 100 if return_list else 1
     ret = []

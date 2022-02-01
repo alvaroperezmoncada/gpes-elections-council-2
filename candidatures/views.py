@@ -1,6 +1,8 @@
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
+from admin.salesforce import check_dni_salesforce
 from candidatures.forms import AllegationForm
 from candidatures.models import Candidature
 from candidatures.utils import presentation, confirm, allegation, view_candidatures
@@ -53,7 +55,13 @@ def allegate(request, num):
     if request.method == 'POST':
         form = AllegationForm(request.POST)
         if form.is_valid():
-            msg = f'Presentada por DNI: {form.cleaned_data["dni_number"]}: '
+            check = check_dni_salesforce(request.POST.get('dni_number'))
+            if not check:
+                message = 'El DNI introducido no corresponde a ningún socio en activo, se puede actualizar en ' \
+                          'la WEB de Greenpeace en Mi Perfil https://miperfil.greenpeace.es/'
+                messages.add_message(request, messages.WARNING, message)
+                return render(request, 'presentation.html', {'form': form})
+            msg = f'Presentada por {check["Name"]} - {form.cleaned_data["dni_number"]} - {check["Email"]}: '
             candidate.allegations += '\r\n\r\n' + msg + form.cleaned_data['alegacion']
             candidate.is_allegate = True
             candidate.validated = False
