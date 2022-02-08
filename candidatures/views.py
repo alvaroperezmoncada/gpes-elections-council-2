@@ -29,6 +29,12 @@ def view_candidatures60(request):
     return view_candidatures(request, 60)
 
 
+def view_candidate_details(request, num):
+    candidate = Candidature.objects.get(pk=num)
+    context = {'candidate': candidate}
+    return render(request, 'candidate-details.html', context=context)
+
+
 # Funciones que controlan las 15 candidaturas que presentan los miembros del consejo.
 def presentation15_view(request):
     return presentation(request, 15)

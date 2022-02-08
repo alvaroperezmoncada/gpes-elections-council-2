@@ -1,65 +1,109 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body %}
-    <h2>Candidaturas provisionalmente válidas</h2>
-    {% for circ, candidatos in ccaa %}
-        {% if circ.pk != 18 %}
-            <h3>{{ circ }}</h3>
-        {% endif %}
+    <main class="main-content">
+        <!--== Start Page Header Area Wrapper ==-->
+        <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="assets/img/photos/bg2.jpg">
+            <div class="container pt--0 pb--0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-header-content">
+                            <h2 class="title">Candidatos</h2>
+                            <nav class="breadcrumb-area">
+                                <ul class="breadcrumb justify-content-center">
+                                    <li><a href="{% url 'index' %}">Inicio</a></li>
+                                    <li class="breadcrumb-sep">//</li>
+                                    <li>Candidatos</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--== End Page Header Area Wrapper ==-->
 
-        {% for candidato in candidatos %}
-            <p>
-            <p class="foto">
-                {% if candidato.photo %}-ñ.
-                    {% if full %}
-                        <img src="{{ candidato.photo.url }}">
-                    {% else %}
-                        <img src="{{ candidato.photo }}">
-                    {% endif %}
-                {% endif %}
-            </p>
+        <!--== Start Team Area Wrapper ==-->
+        <section class="team-area team-inner2-area">
+            <div class="container">
+                <div class="row">
+                    <h2>Candidaturas provisionalmente válidas</h2>
+                    {% for circ, candidatos in ccaa %}
+                        <h4>{{ circ }} </h4>
+                        {% for candidato in candidatos %}
+                            <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                                <!--== Start Team Item ==-->
+                                <div class="team-item">
+                                    <div class="thumb">
+                                        <a href="{% url 'candidate-edit' num=candidato.pk %}">
+                                            <img src="{% static 'img/team/1.jpg' %}" width="160" height="160"
+                                                 alt="Image-HasTech">
+                                        </a>
+                                    </div>
+                                    <div class="content">
+                                        <h4 class="title"><a href="{% url 'candidate-edit' num=candidato.pk %}">{{ candidato }}</a></h4>
+                                        <h5 class="sub-title">{{ candidato.email }}</h5>
+                                        <p class="desc">Antiguedad: {{ candidato.locality }}</p>
+                                        <p class="desc">Antiguedad: {{ candidato.seniority_date|date:"Y" }}</p>
+                                        <p class="desc">{% if candidato.on_the_council %}
+                                            Esta persona pertenece al Consejo en la actualidad y su participación se
+                                            puede ver en los detalles.
+                                        {% else %}
+                                            Esta persona no pertenece al Consejo en la actualidad
+                                        {% endif %}</p>
+                                        <a class="btn-theme btn-white btn-lg"
+                                           href="{% url 'candidate-edit' num=candidato.pk %}">Revisar</a>
+                                    </div>
+                                    <div class="bookmark-icon"><img src="{% static 'img/icons/bookmark1.png' %}"
+                                                                    alt="Image-HasTech">
+                                    </div>
+                                    <div class="bookmark-icon-hover"><img src="{% static 'img/icons/bookmark2.png' %}"
+                                                                          alt="Image-HasTech"></div>
+                                </div>
+                                <!--== End Team Item ==-->
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                <div class="row">
+                    <h2>Candidaturas provisionalmente no válidas</h2>
+                    {% for candidato in not_valid_candidates %}
+                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                            <!--== Start Team Item ==-->
+                            <div class="team-item">
+                                <div class="thumb">
+                                    <a href="{% url 'candidate-details' num=candidato.pk %}">
+                                        <img src="{% static 'img/team/1.jpg' %}" width="160" height="160"
+                                             alt="Image-HasTech">
+                                    </a>
+                                </div>
+                                <div class="content">
+                                    <h4 class="title"><a href="{% url 'candidate-details' num=candidato.pk %}">{{ candidato }}</a></h4>
+                                    <h5 class="sub-title">{{ candidato.email }}</h5>
+                                        <p class="desc">Antiguedad: {{ candidato.locality }}</p>
+                                    <p class="desc">Antiguedad: {{ candidato.seniority_date|date:"Y" }}</p>
+                                    <p class="desc">{% if candidato.on_the_council %}
+                                        Esta persona pertenece al Consejo en la actualidad y su participación se
+                                        puede ver en los detalles.
+                                    {% else %}
+                                        Esta persona no pertenece al Consejo en la actualidad
+                                    {% endif %}</p>
+                                    <a class="btn-theme btn-white btn-lg"
+                                       href="{% url 'candidate-details' num=candidato.pk %}">Ver Candidatura</a>
+                                </div>
+                                <div class="bookmark-icon"><img src="{% static 'img/icons/bookmark1.png' %}"
+                                                                alt="Image-HasTech">
+                                </div>
+                                <div class="bookmark-icon-hover"><img src="{% static 'img/icons/bookmark2.png' %}"
+                                                                      alt="Image-HasTech"></div>
+                            </div>
+                            <!--== End Team Item ==-->
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        <!--== End Team Area Wrapper ==-->
+    </main>
 
-            <p class="nombre"><span class="nombre"><a href="./{{ candidato.id }}/">{{ candidato }}</a></span>
-                <span><a href="mailto:{{ candidato.email }}">{{ candidato.email }}</a></span>
-                <span>Localidad: {{ candidato.locality }}</span>
-                {% if candidato.present_it %} <p>Presentado por {{ candidato.present_it }} {% endif %}
-                </p>
-            <p>Antigüedad en la asociación: {{ candidato.seniority_date|date:"Y" }}</p>
-
-            <h4>cv</h4>
-            <p class="cv">{{ candidato.curriculum_vitae|linebreaks }}</p>
-            <h4>vinculacion</h4>
-            <p class="vinculacion">{{ candidato.bonding|linebreaks }}</p>
-            <h4>motivación</h4>
-            <p class="motivacion">{{ candidato.motivation|linebreaks }}</p>
-            <h4>Campaña sugerida</h4>
-            <p class="campanha">{{ candidato.campaign|linebreaks }}</p>
-            <p class="participacion_activa">{{ candidato.active_participation  | yesno:"☑,☐,?" }} Participación
-                activa</p>
-            <p class="veracidad">{{ candidato.veracity  | yesno:"☑,☐,?" }} Fe de veracidad</p>
-            <p class="en_el_consejo">{{ candidato.on_the_council | yesno:"☑,☐,?" }} En el Consejo actualmente</p>
-            {% if candidato.on_the_council %}
-                <p class="vinculacion">Participación: {{ candidato.participation }}</p>
-            {% endif %}
-        {% endfor %}
-
-    {% endfor %}
-    <h2>Candidaturas provisionalmente no válidas</h2>
-    <table class="alegaciones">
-        <thead>
-        </thead>
-        <tbody>
-        {% for candidato in not_valid_candidates %}
-            <tr>
-                <td class="foto">{% if candidato.photo %}<img src="{{ candidato.photo }}">{% endif %}
-                </td>
-                <td class="nombrelargo">
-                    <div class="nombre"><a href="./{{ candidato.id }}/">{{ candidato }}</a></div>
-                    <a href="mailto:{{ candidato.email }}">{{ candidato.email }}</a>
-                </td>
-                <td class="comentarios">{{ candidato.comments }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 {% endblock %}

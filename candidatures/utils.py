@@ -1,6 +1,8 @@
 from itertools import groupby
 
 from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
 from django.forms import Select
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -11,24 +13,32 @@ from candidatures.models import Candidature
 
 
 def presentation(request, _type):
-    form = NewCandidatureForm if _type == 60 else NewCandidature15Form
+    if _type == 60:
+        form = NewCandidatureForm
+        member = 'Socios'
+    else:
+        form = NewCandidature15Form
+        member = 'Consejeros'
     if request.method == 'POST':
         form = form(request.POST, request.FILES)
         if form.is_valid():
             if not check_dni_salesforce(request.POST.get('dni_number')):
                 message = 'El DNI introducido no corresponde a ningún socio en activo, se puede actualizar en ' \
                           'la WEB de Greenpeace en Mi Perfil https://miperfil.greenpeace.es/'
+                print('dni no valido', message)
                 messages.add_message(request, messages.WARNING, message)
                 return render(request, 'presentation.html', {'form': form})
 
             if Candidature.objects.filter(dni_number=request.POST.get('dni_number')).count() > 0:
                 message = 'El DNI ya se encuentra registrado'
+                print('ya hay  otra candidatura', message)
                 messages.add_message(request, messages.ERROR, message)
                 return render(request, 'presentation.html', {'form': form})
             candidate = form.save()
             request.session['candidate_id'] = candidate.id
             return HttpResponseRedirect(f'confirmar_{_type}')
-    return render(request, 'presentation.html', {'form': form})
+        print('paila la mocha', form.errors)
+    return render(request, 'presentation.html', {'form': form, 'member': member})
 
 
 def confirm(request, _type):
@@ -37,7 +47,7 @@ def confirm(request, _type):
         candidate.announcement = _type
         candidate.partner_number = 'n/a'
         candidate.save()
-        # envia_confirmacion(candidate)
+        envia_confirmacion(candidate)
         return HttpResponseRedirect(f'/ok_{_type}')
     else:
         form = NewCandidatureConfirmForm(instance=candidate)
@@ -50,6 +60,24 @@ def confirm(request, _type):
                 w.attrs['readonly'] = True
 
         return render(request, 'presentation_preview.html', c)
+
+
+def envia_confirmacion(candidato):
+    form = NewCandidatureConfirmForm(instance=candidato)
+    ret = u'Se ha recibido la siguiente candidatura al Consejo de Greenpeace España:\n'
+    for f in form:
+        ret += '\n%s: %s' % (f.label, f.value())
+    ret += u'\nSi lo consideras necesario, contacta con la Comisión Electoral en eleccion.es@greenpeace.org.\nGracias'
+    destinatarios = [form['email'].value()]
+    eles = get_user_model().objects.filter(username='eles').first()
+    if eles:
+        destinatarios.append(eles.email)
+    # if candidato.presenta and candidato.presenta.correo_electronico:
+    #     destinatarios.append(candidato.presenta.correo_electronico)
+    send_mail(
+        subject=u"Candidatura al Consejo de Greenpeace España", message=ret, from_email='eleccion.es@greenpeace.org',
+        recipient_list=destinatarios,
+    )
 
 
 def allegation(request, _type):

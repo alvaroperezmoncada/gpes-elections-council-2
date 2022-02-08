@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+    <main class="main-content">
+        <!--== Start Page Header Area Wrapper ==-->
+        <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="assets/img/photos/bg2.jpg">
+            <div class="container pt--0 pb--0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-header-content">
+                            <h2 class="title">Detalle del Candidato</h2>
+                            <nav class="breadcrumb-area">
+                                <ul class="breadcrumb justify-content-center">
+                                    <li><a href="{% url 'index' %}">Inicio</a></li>
+                                    <li class="breadcrumb-sep">//</li>
+                                    <li>Detalle</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--== End Page Header Area Wrapper ==-->
+
+        <!--== Start Team Details Area Wrapper ==-->
+        <section class="team-details-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="team-details-wrap">
+                            <div class="team-details-info">
+                                <div class="thumb">
+                                    <img src="assets/img/team/details1.jpg" width="130" height="130"
+                                         alt="Image-HasTech">
+                                </div>
+                                <div class="content">
+                                    <h4 class="title">{{ candidate }}</h4>
+                                    <h5 class="sub-title">{{ candidate.locality }}</h5>
+                                    <ul class="info-list">
+                                        <li><i class="icofont-location-pin"></i> {{ candidate.circumscription }}</li>
+                                        <li><i class="icofont-phone"></i> {{ candidate.email }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-7 col-xl-8">
+                        <div class="team-details-item">
+                            <div class="content">
+                                <h4 class="title">Curriculum Vitae</h4>
+                                <p class="desc">{{ candidate.curriculum_vitae }}</p>
+                            </div>
+                            <div class="content">
+                                <h4 class="title">Vinculación</h4>
+                                <p class="desc">{{ candidate.bonding }}</p>
+                            </div>
+                            <div class="content">
+                                <h4 class="title">Motivación</h4>
+                                <p class="desc">{{ candidate.motivation }}</p>
+                            </div>
+                            <div class="content">
+                                <h4 class="title">Campaña</h4>
+                                <p class="desc">{{ candidate.campaign }}</p>
+                            </div>
+                            {% if candidate.participation %}
+                                <div class="content">
+                                    <h4 class="title">Participación</h4>
+                                    <p class="desc">{{ candidate.participation }}</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-xl-4">
+                        <div class="team-sidebar">
+                            <div class="widget-item">
+                                <div class="widget-title">
+                                    <h3 class="title">Información</h3>
+                                </div>
+                                <div class="summery-info">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <td class="table-name">Fecha de presentación</td>
+                                            <td class="dotted">:</td>
+                                            <td>{{ candidate.filing_date|date:"Y-m-d" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-name">Número de socio</td>
+                                            <td class="dotted">:</td>
+                                            <td>{{ candidate.partner_number }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-name">Antiguedad</td>
+                                            <td class="dotted">:</td>
+                                            <td>{{ candidate.seniority_date|date:"Y" }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--== End Team Details Area Wrapper ==-->
+    </main>
+
+{% endblock %}

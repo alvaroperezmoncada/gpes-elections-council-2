@@ -2,4 +2,96 @@
 {% load static %}
 {% block body %}
 
+        <main class="main-content">
+            <!--== Start Hero Area Wrapper ==-->
+            <section class="home-slider-area">
+                <div class="home-slider-container default-slider-container">
+                    <div class="home-slider-wrapper slider-default">
+                        <div class="slider-content-area" data-bg-img="{% static 'img/slider/slider-bg1.jpg' %}">
+                            <div class="container pt--0 pb--0">
+                                <div class="slider-container">
+                                    <div class="row justify-content-center align-items-center">
+                                        <div class="col-12 col-lg-8">
+                                            <div class="slider-content">
+                                                <h2 class="title">Los plazos del proceso electoral son éstos:</h2>
+                                                <h3 style="color: #fefefe">Personas del Consejo elegidas por socias y
+                                                    socios</h3>
+                                                <p class="desc">Presentación de candidaturas: Del xxxx al xxxx</p>
+                                                <p class="desc">Alegaciones: Del xxxx al xxxx</p>
+                                                <p class="desc">Votaciones: Del xxxx al xxxx</p>
+                                                <p class="desc">Resultados: Del xxxx al xxxx</p>
+                                                <hr class="title">
+                                                <h3 style="color: #fefefe">Personas del Consejo elegidas por consejeras y
+                                                    consejeros</h3>
+                                                <p class="desc">Presentación de candidaturas: Del xxxx al xxxx</p>
+                                                <p class="desc">Alegaciones: Del xxxx al xxxx</p>
+                                                <p class="desc">Votaciones: Del xxxx al xxxx</p>
+                                                <p class="desc">Resultados: Del xxxx al xxxx</p>
+                                                <p class="desc">Asamblea: Del xxxx al xxxx</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+{#                <div class="container pt--0 pb--0">#}
+{#                    <div class="row">#}
+{#                        <div class="col-12">#}
+{#                            <div class="play-video-btn">#}
+{#                                <a href="https://www.youtube.com/mcvqOUtcAJg" class="video-popup">#}
+{#                                    <img src="{% static 'img/icons/play.png' %}" alt="Image-HasTech">#}
+{#                                </a>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+                <div class="home-slider-shape">
+                    <img class="shape1" data-aos="fade-down" data-aos-duration="1500"
+                         src="{% static 'img/slider/vector1.png' %}" width="270" height="234" alt="Image-HasTech">
+                    <img class="shape2" data-aos="fade-left" data-aos-duration="2000"
+                         src="{% static 'img/slider/vector2.png' %}" width="201" height="346" alt="Image-HasTech">
+                    <img class="shape3" data-aos="fade-right" data-aos-duration="2000"
+                         src="{% static 'img/slider/vector3.png' %}" width="276" height="432" alt="Image-HasTech">
+                    <img class="shape4" data-aos="flip-left" data-aos-duration="1500"
+                         src="{% static 'img/slider/vector4.png' %}" width="127" height="121" alt="Image-HasTech">
+                </div>
+            </section>
+            <!--== End Hero Area Wrapper ==-->
+
+            <!--== Start Job Category Area Wrapper ==-->
+            <section class="job-category-area">
+                <div class="container" data-aos="fade-down">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="section-title text-center">
+                                <h3 class="title">Modulos Activos</h3>
+                                <div class="desc">
+                                    <p>A medida que se cumplan los plazos para cada módulo se irán agregando a continuación:</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-gutter-20">
+                        {% for module in modules %}
+                            <div class="col-sm-6 col-lg-3">
+                                <!--== Start Job Category Item ==-->
+                                <div class="job-category-item">
+                                    <div class="content">
+                                        <h3 class="title"><a href="./{{ module.module }}">{{ module.ds }}</a></h3>
+                                    </div>
+                                    <a class="overlay-link" href="./{{ module.module }}"></a>
+                                </div>
+                                <!--== End Job Category Item ==-->
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+            <!--== End Job Category Area Wrapper ==-->
+
+        </main>
+
 {% endblock %}

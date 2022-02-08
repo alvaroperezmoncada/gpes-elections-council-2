@@ -16,7 +16,7 @@ class Circumscription(models.Model):
         return self.papeleta_set.count()
 
     def cuentaPapeletasVerificadas(self):
-        if self.id == 18:
+        if self.id == 19:
             return self.circunscripcion_voto_15.count()
         return self.circunscripcion_voto_60.count()
 

@@ -125,7 +125,7 @@ def vote(request, _type, voting_class):
     request.session['usu%s' % _type] = member.pk
     if _type == 15:
         return HttpResponseRedirect('/papeleta_%s/%s/' % (_type, 18))
-    if _type == 60 and member.circumscription.pk != 18:
+    if _type == 60 and member.circumscription.pk != 19:
         return HttpResponseRedirect('/papeleta_%s/%s/' % (_type, member.circumscription.pk))
     else:
         return render(request, 'selector_usu.html', dict(tipo=_type, ccaa=Circumscription.objects.all()))
@@ -215,9 +215,9 @@ def send_pass(request, _type):
             try:
                 circunscripcion_por_cp = Province.objects.get(prefix_cp=prefijo).circumscription
             except ObjectDoesNotExist:
-                circunscripcion_por_cp = Circumscription.objects.get(id=18)
+                circunscripcion_por_cp = Circumscription.objects.get(id=19)
         else:
-            circunscripcion_por_cp = Circumscription.objects.get(id=18)
+            circunscripcion_por_cp = Circumscription.objects.get(id=19)
         socio.circumscription = circunscripcion_por_cp
         socio.save()
         # socio.get_clave()
@@ -265,7 +265,7 @@ def register_vote(request, ca, _type, voting_class):
     circ = Circumscription.objects.get(pk=ca)
     usu = voting_class.objects.get(pk=id_usu)
     if _type == 60:
-        assert usu.circumscription == 18 or circ.pk == usu.circumscription_id, 'Se está votando por una circ no autorizada'
+        assert usu.circumscription == 19 or circ.pk == usu.circumscription_id, 'Se está votando por una circ no autorizada'
     can_vote, msg = usu.can_vote()
     if not can_vote:
         messages.add_message(request, messages.WARNING, 'No puede votar: ' + msg)
@@ -305,16 +305,16 @@ def register_vote(request, ca, _type, voting_class):
 
 def results(request, _type):
     circumscription = Circumscription.objects.all()
-    ccaa = circumscription.exclude(pk=18) if _type == 60 else circumscription.filter(pk=18)
+    ccaa = circumscription.exclude(pk=19) if _type == 60 else circumscription.filter(pk=19)
     c = dict(ccaa=ccaa)
     return render(request, 'results.html', c)
 
 
 def selector(request, _type):
-    circ_singular = Circumscription.objects.get(pk=18)
+    circ_singular = Circumscription.objects.get(pk=19)
     if _type == 15:
-        papeletas = Ballot.objects.filter(circumscription__id=18).order_by('-fecha_registro')[:5]
-        ccaa = Circumscription.objects.filter(id=18)
+        papeletas = Ballot.objects.filter(circumscription__id=19).order_by('-fecha_registro')[:5]
+        ccaa = Circumscription.objects.filter(id=19)
     else:
         papeletas = Ballot.objects.all().order_by('-fecha_registro')[:5]
         ccaa = Circumscription.objects.all()

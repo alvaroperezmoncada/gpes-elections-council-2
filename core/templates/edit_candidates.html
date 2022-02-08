@@ -1,22 +1,89 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body %}
-    <form method="post" enctype="multipart/form-data">
-        {% for field in form %}
-            <div class="tr">
-                <div class="td">{{ field.label_tag }}{% if field.field.required %}*{% endif %}</div>
-                <div class="td">{{ field.errors }}{{ field }}</div>
+    <main class="main-content">
+        <!--== Start Page Header Area Wrapper ==-->
+        <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="assets/img/photos/bg2.jpg">
+            <div class="container pt--0 pb--0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-header-content">
+                            <h2 class="title">Comisión Socios</h2>
+                            <nav class="breadcrumb-area">
+                                <ul class="breadcrumb justify-content-center">
+                                    <li><a href="{% url 'index' %}">Inicio</a></li>
+                                    <li class="breadcrumb-sep">//</li>
+                                    <li>Comisión</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
             </div>
-        {% endfor %}
-        {% csrf_token %}
-        <input type="submit" value="Guardar datos"/>
-    </form>
-    <div>
-        <p>Información de BD socios:</p>
-        <pre>
-{% for kv in info.items %}
-    {{ kv }}
-{% endfor %}
-</pre>
-    </div>
+        </div>
+        <!--== End Page Header Area Wrapper ==-->
+
+        <!--== Start Team Details Area Wrapper ==-->
+        <section class="team-details-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="team-details-wrap">
+                            <div class="team-details-info">
+                                <div class="thumb">
+                                    <img src="assets/img/team/details1.jpg" width="130" height="130"
+                                         alt="Image-HasTech">
+                                </div>
+                                <div class="content">
+                                    <h4 class="title">{{ candidate }}</h4>
+                                    <h5 class="sub-title">{{ candidate.locality }}</h5>
+                                    <ul class="info-list">
+                                        <li><i class="icofont-location-pin"></i> {{ candidate.circumscription }}</li>
+                                        <li><i class="icofont-phone"></i> {{ candidate.email }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="team-sidebar">
+                            <div class="widget-item">
+                                <div class="widget-title">
+                                    <h3 class="title">Información</h3>
+                                </div>
+                                <div class="summery-info">
+                                    <form method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <table class="table">
+                                            <tbody>
+                                            {% for field in form %}
+                                                <tr>
+                                                    <td class="table-name">
+                                                        {{ field.label_tag }}{% if field.field.required %}*{% endif %}
+                                                    </td>
+                                                    <td>{{ field.errors }}{{ field }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        <div class="col-md-12">
+                                            <div class="form-group mb--0">
+                                                <button class="btn-theme d-block w-100" type="submit">
+                                                    Guardar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--== End Team Details Area Wrapper ==-->
+    </main>
+
 {% endblock %}

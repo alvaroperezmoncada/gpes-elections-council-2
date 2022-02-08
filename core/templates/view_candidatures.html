@@ -2,54 +2,70 @@
 {% load static %}
 {% block body_id %}ver_candidatos{% endblock %}
 {% block body %}
-    <div>
-        <a href="javascript:window.close()">[X] Cerrar ventana</a>
-    </div>
-{#    <div>#}
-{#        <a target="plazos" href="{% url 'ver_plazos' %}">Consultar plazos del proceso</a>#}
-{#    </div>#}
+    <main class="main-content">
+        <!--== Start Page Header Area Wrapper ==-->
+        <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="assets/img/photos/bg2.jpg">
+            <div class="container pt--0 pb--0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-header-content">
+                            <h2 class="title">Candidatos</h2>
+                            <nav class="breadcrumb-area">
+                                <ul class="breadcrumb justify-content-center">
+                                    <li><a href="{% url 'index' %}">Inicio</a></li>
+                                    <li class="breadcrumb-sep">//</li>
+                                    <li>Candidatos</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--== End Page Header Area Wrapper ==-->
 
-    {% for circ, candidatos in ccaa %}
-        {% if circ.pk != 18 %}
-            <h3>{{ circ }}</h3>
-        {% endif %}
-        <table class="alegaciones">
-            <thead>
-            <tr>
-                <th></th>
-                <th>Currículum</th>
-                <th>Vinculación con Greenpeace</th>
-                <th>Motivación</th>
-                <th>¿Cambios en Greenpeace?</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for candidato in candidatos %}
-                <tr>
-                    <td class="nombre">
-                        <div class="nombre">{{ candidato }}</div>
-                        {% if candidato.photo %}<img src="">{% endif %}
-                        <div>Localidad: {{ candidato.locality }}</div>
-                        <div>Antigüedad en la asociación: {{ candidato.seniority_date|date:"Y" }}</div>
-                        {% if candidato.present_it %}
-                            <div>Presentado por {{ candidato.present_it }}</div> {% endif %}
-                    </td>
-                    <td class="cv">{{ candidato.curriculum_vitae|linebreaks }}</td>
-                    <td class="vinculacion">{{ candidato.bonding|linebreaks }}</td>
-                    <td class="motivacion">{{ candidato.motivation|linebreaks }}</td>
-                    <td class="campanha">{{ candidato.campaign|linebreaks }}</td>
-                    <td class="vinculacion">{% if candidato.on_the_council %}
-                        Esta persona pertenece al Consejo en la actualidad y su participación ha sido la siguiente:
-                        {{ candidato.participation | linebreaks }}
-                    {% elif candidato.on_the_council == False %}
-                        Esta persona no pertenece al Consejo en la actualidad
-                    {% else %}
-                        Información pendiente de cumplimentar
-                    {% endif %}
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% endfor %}
+        <!--== Start Team Area Wrapper ==-->
+        <section class="team-area team-inner2-area">
+            <div class="container">
+                <div class="row">
+                    {% for circ, candidatos in ccaa %}
+                        <div>{{ circ }} </div>
+                        {% for candidato in candidatos %}
+                            <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                                <!--== Start Team Item ==-->
+                                <div class="team-item">
+                                    <div class="thumb">
+                                        <a href="{% url 'candidate-details' num=candidato.pk %}">
+                                            <img src="{% static 'img/team/1.jpg' %}" width="160" height="160"
+                                                 alt="Image-HasTech">
+                                        </a>
+                                    </div>
+                                    <div class="content">
+                                        <h4 class="title"><a href="candidate-details.html">{{ candidato }}</a></h4>
+                                        <h5 class="sub-title">{{ candidato.locality }}</h5>
+                                        <p class="desc">Antiguedad: {{ candidato.seniority_date|date:"Y" }}</p>
+                                        <p class="desc">{% if candidato.on_the_council %}
+                                            Esta persona pertenece al Consejo en la actualidad y su participación se
+                                            puede ver en los detalles.
+                                        {% else %}
+                                            Esta persona no pertenece al Consejo en la actualidad
+                                        {% endif %}</p>
+                                        <a class="btn-theme btn-white btn-lg" href="{% url 'candidate-details' num=candidato.pk %}">Ver Candidatura</a>
+                                    </div>
+                                    <div class="bookmark-icon"><img src="{% static 'img/icons/bookmark1.png' %}"
+                                                                    alt="Image-HasTech">
+                                    </div>
+                                    <div class="bookmark-icon-hover"><img src="{% static 'img/icons/bookmark2.png' %}"
+                                                                          alt="Image-HasTech"></div>
+                                </div>
+                                <!--== End Team Item ==-->
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        <!--== End Team Area Wrapper ==-->
+    </main>
+
 {% endblock %}
