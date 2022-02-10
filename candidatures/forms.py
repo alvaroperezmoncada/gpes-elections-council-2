@@ -92,5 +92,5 @@ class NewCandidature15Form(ModelForm):
 
 
 class AllegationForm(Form):
-    alegacion = forms.CharField(max_length=200, widget=forms.Textarea)
-    dni_number = forms.CharField(max_length=200)
+    dni_number = forms.CharField(max_length=200, label='DNI de quien alega')
+    alegacion = forms.CharField(max_length=200, widget=forms.Textarea, label='Alegación')

@@ -36,7 +36,7 @@ urlpatterns = [
     path('ver_candidaturas_15/', view_candidatures15, name='candidatures15'),
     path('ver_candidaturas_60/<int:num>', view_candidate_details, name='candidate-details'),
     path('alegacion_ok/', allegation_ok),
-    path('alegar/<int:num>/', allegate),
+    path('alegar/<int:num>/', allegate, name='allegate'),
     path('comision_60/', commision60, name='commision60'),
     path('comision_60/<int:num>/', edit_candidate60, name='candidate-edit'),
     path('comision_15/', commision15, name='commision15'),

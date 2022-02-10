@@ -25,19 +25,16 @@ def presentation(request, _type):
             if not check_dni_salesforce(request.POST.get('dni_number')):
                 message = 'El DNI introducido no corresponde a ningún socio en activo, se puede actualizar en ' \
                           'la WEB de Greenpeace en Mi Perfil https://miperfil.greenpeace.es/'
-                print('dni no valido', message)
                 messages.add_message(request, messages.WARNING, message)
                 return render(request, 'presentation.html', {'form': form})
 
             if Candidature.objects.filter(dni_number=request.POST.get('dni_number')).count() > 0:
                 message = 'El DNI ya se encuentra registrado'
-                print('ya hay  otra candidatura', message)
                 messages.add_message(request, messages.ERROR, message)
                 return render(request, 'presentation.html', {'form': form})
             candidate = form.save()
             request.session['candidate_id'] = candidate.id
             return HttpResponseRedirect(f'confirmar_{_type}')
-        print('paila la mocha', form.errors)
     return render(request, 'presentation.html', {'form': form, 'member': member})
 
 

@@ -1,6 +1,68 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body %}
+     <main class="main-content">
+        <!--== Start Page Header Area Wrapper ==-->
+        <div class="page-header-area sec-overlay sec-overlay-black"
+             data-bg-img="{% static 'img/slider/slider-bg1.jpg' %}">
+            <div class="container pt--0 pb--0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-header-content">
+                            <h2 class="title">Alegaciones</h2>
+                            <nav class="breadcrumb-area">
+                                <ul class="breadcrumb justify-content-center">
+                                    <li><a href="./">Inicio</a></li>
+                                    <li class="breadcrumb-sep">//</li>
+                                    <li>Alegaciones</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--== End Page Header Area Wrapper ==-->
+
+        <!--== Start Contact Area Wrapper ==-->
+        <section class="contact-area contact-page-area">
+            <div class="container">
+                <div class="row contact-page-wrapper">
+                    <div class="col-lg-12">
+                        <!--== Start Contact Form ==-->
+                        <div class="contact-form">
+                            <h4 class="contact-form-title">Introduce tu alegación para la candidatura de {{ candidate }}.</h4>
+                            <form method="post" id="alta_candidato">
+                                {% csrf_token %}
+                                <div class="row">
+                                    {% for field in form %}
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <strong>{{ field.label_tag }}{% if field.field.required %}
+                                                    *{% endif %}</strong>
+                                            </div>
+                                            <div class="td">{{ field.errors }}{{ field }}</div>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="col-md-12">
+                                        <div class="form-group mb--0">
+                                            <input class="btn-theme d-block w-100" type="submit"
+                                                   value="Enviar Alegación"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!--== End Contact Form ==-->
+
+                        <!--== Message Notification ==-->
+                        <div class="form-message"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--== End Contact Area Wrapper ==-->
+    </main>
     <h3>Introduce tu alegación para la candidatura de {{ candidate }}</h3>
     <div>{{ form.alegacion.errors }}</div>
     <form method="post">
