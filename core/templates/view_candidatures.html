@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load thumbnail %}
 {% block body_id %}ver_candidatos{% endblock %}
 {% block body %}
     <main class="main-content">
@@ -36,7 +37,7 @@
                                 <div class="team-item">
                                     <div class="thumb">
                                         <a href="{% url 'candidate-details' num=candidato.pk %}">
-                                            <img src="{% static 'img/team/1.jpg' %}" width="160" height="160"
+                                            <img src="{% thumbnail candidato.photo %}" width="160" height="160"
                                                  alt="Image-HasTech">
                                         </a>
                                     </div>
