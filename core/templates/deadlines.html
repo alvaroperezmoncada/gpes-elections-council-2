@@ -1,65 +1,63 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block navbar %}
+    {% for module in modules %}
+        <li><a href="./{{ module.module }}"><span>{{ module.ds }}</span></a></li>
+    {% endfor %}
+
+
+{% endblock %}
 {% block body %}
-    <p>Los plazos del proceso electoral son éstos:</p>
-    <table class="plazos">
-        <thead>
-        <tr>
-            <th>Personas del Consejo elegidas por socias y socios</th>
-            <th>inicio</th>
-            <th>fin</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>Presentación de candidaturas</td>
-            <td>x-x-x</td>
-            <td>x-x-x</td>
-        </tr>
-        <tr>
-            <td>Alegaciones</td>
-            <td>x-x-x</td>
-            <td>x-x-x</td>
-        </tr>
-        <tr>
-            <td>Votación</td>
-            <td>x-x-x</td>
-            <td>x-x-x</td>
-        </tr>
-        <tr>
-            <td>Resultado</td>
-            <td>x-x-x</td>
-            <td>x-x-x</td>
-        </tr>
-        <tr>
-            <th>Personas del Consejo elegidas por consejeras y consejeros</th>
-            <th>inicio</th>
-            <th>fin</th>
-        </tr>
-        <tr>
-            <td>Presentación de candidaturas</td>
-            <td>x-x-x</td>
-            <td>x-x-x</td>
-        </tr>
-        <tr>
-            <td>Alegaciones</td>
-            <td>x-x-x</td>
-            <td>x-x-x</td>
-        </tr>
-        <tr>
-            <td>Votación</td>
-            <td>x-x-x</td>
-            <td>x-x-x</td>
-        </tr>
-        <tr>
-            <td>Resultado</td>
-            <td>x-x-x</td>
-            <td>x-x-x</td>
-        </tr>
-        <tr>
-            <th>Asamblea</th>
-            <td>x-x-x</td>
-            <td>x-x-x</td>
-        </tr>
-    </table>
+
+    <main class="main-content">
+        <!--== Start Hero Area Wrapper ==-->
+        <section class="home-slider-area">
+            <div class="home-slider-container default-slider-container">
+                <div class="home-slider-wrapper slider-default">
+                    <div class="slider-content-area" data-bg-img="{% static 'img/slider/slider-bg1.jpg' %}">
+                        <div class="container pt--0 pb--0">
+                            <div class="slider-container">
+                                <div class="row justify-content-center align-items-center">
+                                    <div class="col-12 col-lg-8">
+                                        <div class="slider-content">
+                                            <h2 class="title">Los plazos del proceso electoral son éstos:</h2>
+                                            <h3 style="color: #fefefe">Personas del Consejo elegidas por socias y
+                                                socios</h3>
+                                            <p class="desc">Presentación de candidaturas: Del xxxx al xxxx</p>
+                                            <p class="desc">Alegaciones: Del xxxx al xxxx</p>
+                                            <p class="desc">Votaciones: Del xxxx al xxxx</p>
+                                            <p class="desc">Resultados: Del xxxx al xxxx</p>
+                                            <hr class="title">
+                                            <h3 style="color: #fefefe">Personas del Consejo elegidas por consejeras y
+                                                consejeros</h3>
+                                            <p class="desc">Presentación de candidaturas: Del xxxx al xxxx</p>
+                                            <p class="desc">Alegaciones: Del xxxx al xxxx</p>
+                                            <p class="desc">Votaciones: Del xxxx al xxxx</p>
+                                            <p class="desc">Resultados: Del xxxx al xxxx</p>
+                                            <p class="desc">Asamblea: Del xxxx al xxxx</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="home-slider-shape">
+                <img class="shape1" data-aos="fade-down" data-aos-duration="1500"
+                     src="{% static 'img/slider/vector1.png' %}" width="270" height="234" alt="Image-HasTech">
+                <img class="shape2" data-aos="fade-left" data-aos-duration="2000"
+                     src="{% static 'img/slider/vector2.png' %}" width="201" height="346" alt="Image-HasTech">
+                <img class="shape3" data-aos="fade-right" data-aos-duration="2000"
+                     src="{% static 'img/slider/vector3.png' %}" width="276" height="432" alt="Image-HasTech">
+                <img class="shape4" data-aos="flip-left" data-aos-duration="1500"
+                     src="{% static 'img/slider/vector4.png' %}" width="127" height="121" alt="Image-HasTech">
+            </div>
+        </section>
+        <!--== End Hero Area Wrapper ==-->
+
+    </main>
+
 {% endblock %}

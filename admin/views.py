@@ -8,7 +8,9 @@ from associate.models import Associate
 
 def index_view(request):
     active_modules = get_active_modules(request)
-    return render(request, 'index.html', context={'modules': active_modules})
+    if active_modules.count() > 0:
+        return render(request, 'index.html', context={'modules': active_modules})
+    return render(request, 'deadlines.html', context={'modules': active_modules})
 
 
 def commision60(request):

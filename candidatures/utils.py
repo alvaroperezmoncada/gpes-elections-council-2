@@ -93,3 +93,15 @@ def view_candidatures(request, _type):
     ccaa = [(k, list(v)) for (k, v) in groupby(valid_candidates, lambda x: x.circumscription)]
     context = {'ccaa': ccaa}
     return render(request, 'view_candidatures.html', context=context)
+
+
+def send_allegation_mail(candidate, msg):
+    ret = f'Se ha recibido una alegación al candidato: {candidate}\n'
+    ret += f'\n{msg}\nGracias'
+    eles = get_user_model().objects.filter(username='eles').first()
+    if eles:
+        destinatarios = [eles.email]
+        send_mail(
+            subject=u"Se ha generado una alegación", message=ret, from_email='eleccion.es@greenpeace.org',
+            recipient_list=destinatarios,
+        )

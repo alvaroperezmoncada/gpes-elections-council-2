@@ -60,34 +60,12 @@
                         <div class="header-align-center">
                             <div class="header-navigation-area position-relative">
                                 <ul class="main-menu nav">
-                                    <li><a href={% url 'index' %}><span>Inicio</span></a></li>
-                                    <li class="has-submenu"><a
-                                            href="{% url 'candidatures60' %}"><span>Candidatos Socios</span></a></li>
-                                    <li><a href="{% url 'candidatures15' %}"><span>Candidatos Consejeros</span></a></li>
-                                    {% if user.is_authenticated %}
-                                        <li class="has-submenu"><a
-                                                href="{% url 'commision60' %}"><span>Comisión Socios</span></a></li>
-                                        <li class="has-submenu"><a href="{% url 'commision15' %}"><span>Comisión Consejeros</span></a>
-                                        </li>
-                                    {% endif %}
+                                    <li><a href={% url 'index' %}><span></span></a></li>
+
                                 </ul>
                             </div>
                         </div>
-                        <div class="header-align-end">
-                            <div class="header-action-area">
-                                {% if user.is_authenticated %}
-                                    <a class="btn-registration" href="{% url 'logout' %}"><span>+</span> Cerrar Sesión
-                                    </a>
-                                {% else %}
-                                    <a class="btn-registration" href="{% url 'login' %}"><span>+</span> Iniciar Sesión
-                                    </a>
-                                {% endif %}
-                                <button class="btn-menu" type="button" data-bs-toggle="offcanvas"
-                                        data-bs-target="#AsideOffcanvasMenu" aria-controls="AsideOffcanvasMenu">
-                                    <i class="icofont-navigation-menu"></i>
-                                </button>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -112,8 +90,6 @@
                                     <img class="logo-main" src="{% static 'img/logo.png' %}" alt="Logo"/>
                                 </a>
                             </div>
-                            <p class="desc">That necessitat ecommerce platform that optimi your store popularised
-                                the release</p>
                             <div class="social-icons">
                                 <a href="https://www.facebook.com" target="_blank" rel="noopener"><i
                                         class="icofont-facebook"></i></a>
@@ -121,86 +97,6 @@
                                         class="icofont-skype"></i></a>
                                 <a href="https://twitter.com" target="_blank" rel="noopener"><i
                                         class="icofont-twitter"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-9">
-                        <div class="row">
-                            <div class="col-md-3 col-lg-3">
-                                <div class="widget-item nav-menu-item1">
-                                    <h4 class="widget-title">Company</h4>
-                                    <h4 class="widget-collapsed-title collapsed" data-bs-toggle="collapse"
-                                        data-bs-target="#widgetId-1">Company</h4>
-                                    <div id="widgetId-1" class="collapse widget-collapse-body">
-                                        <div class="collapse-body">
-                                            <div class="widget-menu-wrap">
-                                                <ul class="nav-menu">
-                                                    <li><a href="about-us.html">About Us</a></li>
-                                                    <li><a href="about-us.html">Why Extobot</a></li>
-                                                    <li><a href="contact.html">Contact With Us</a></li>
-                                                    <li><a href="contact.html">Our Partners</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-lg-3">
-                                <div class="widget-item nav-menu-item2">
-                                    <h4 class="widget-title">Resources</h4>
-                                    <h4 class="widget-collapsed-title collapsed" data-bs-toggle="collapse"
-                                        data-bs-target="#widgetId-2">Resources</h4>
-                                    <div id="widgetId-2" class="collapse widget-collapse-body">
-                                        <div class="collapse-body">
-                                            <div class="widget-menu-wrap">
-                                                <ul class="nav-menu">
-                                                    <li><a href="account-login.html">Quick Links</a></li>
-                                                    <li><a href="job.html">Job Packages</a></li>
-                                                    <li><a href="job.html">Post New Job</a></li>
-                                                    <li><a href="job.html">Jobs Listing</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-lg-3">
-                                <div class="widget-item nav-menu-item3">
-                                    <h4 class="widget-title">Legal</h4>
-                                    <h4 class="widget-collapsed-title collapsed" data-bs-toggle="collapse"
-                                        data-bs-target="#widgetId-3">Legal</h4>
-                                    <div id="widgetId-3" class="collapse widget-collapse-body">
-                                        <div class="collapse-body">
-                                            <div class="widget-menu-wrap">
-                                                <ul class="nav-menu">
-                                                    <li><a href="account-login.html">Affiliate</a></li>
-                                                    <li><a href="blog.html">Blog</a></li>
-                                                    <li><a href="account-login.html">Help & Support</a></li>
-                                                    <li><a href="job.html">Careers</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-lg-3">
-                                <div class="widget-item nav-menu-item4">
-                                    <h4 class="widget-title">Products</h4>
-                                    <h4 class="widget-collapsed-title collapsed" data-bs-toggle="collapse"
-                                        data-bs-target="#widgetId-4">Products</h4>
-                                    <div id="widgetId-4" class="collapse widget-collapse-body">
-                                        <div class="collapse-body">
-                                            <div class="widget-menu-wrap">
-                                                <ul class="nav-menu">
-                                                    <li><a href="account-login.html">Star a Trial</a></li>
-                                                    <li><a href="about-us.html">How It Works</a></li>
-                                                    <li><a href="account-login.html">Features</a></li>
-                                                    <li><a href="about-us.html">Price & Planing</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

@@ -113,7 +113,7 @@ def vote(request, _type, voting_class):
     try:
         member = voting_class.objects.get(password=password)
     except voting_class.DoesNotExist:
-        message = 'Verifique el identificador, por favor'
+        message = 'Verifique la clave por favor'
         messages.add_message(request, messages.INFO, message)
         return render(request, 'vote.html', context={'tipo': _type})
 

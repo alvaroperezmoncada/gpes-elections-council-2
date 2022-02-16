@@ -5,7 +5,7 @@ from django.shortcuts import render
 from admin.salesforce import check_dni_salesforce
 from candidatures.forms import AllegationForm
 from candidatures.models import Candidature
-from candidatures.utils import presentation, confirm, allegation, view_candidatures
+from candidatures.utils import presentation, confirm, allegation, view_candidatures, send_allegation_mail
 
 
 # Funciones que controlan las candidaturas de los 60 candidatos.
@@ -72,6 +72,7 @@ def allegate(request, num):
             candidate.is_allegate = True
             candidate.validated = False
             candidate.save()
+            send_allegation_mail(candidate, msg)
             return HttpResponseRedirect('/alegacion_ok/')
 
     else:

@@ -50,43 +50,105 @@
             return false //no debería llegar aquí
         }
     </script>
-    <div style="clear:both;"></div>
-    {{ cruces }}
-    <form id="frm" method="post" action="./registrar/" style="display:inline;">
-        {% csrf_token %}
-        <ul>
-            {% for c in circ.candidatos_ordenados %}
-                <li><label><input name="cdto_{{ c.id }}" value={{ c.id }} type="checkbox"
-                        {% if c.pk in cruces %} checked="checked"
-                        {% endif %}
-                > {{ c.firstname }} {{ c.lastname }} <a class="undecorated"
-                                                        onclick="$('#desc_{{ c.id }}').toggle(); return false;"
-                                                        href="#NN">+ información</a>
-                    <table class="oculto" id="desc_{{ c.id }}">
-                        <tbody>
-                        <tr>
-                            <td class="foto">{% if c.photo %}<img src="{{ c.photo }}">{% endif %}</td>
-                            <td class="nombre">
-                                <div>Localidad: {{ c.locality }}</div>
-                                <div>Antigüedad en la asociación: {{ c.seniority_date|date:"Y" }}</div>
-                                <div>{{ c.description|linebreaks }}</div>
-                                {% if c.present_it %}
-                                    <div>Presentado por {{ c.present_it }}</div> {% endif %}
-                            </td>
-                            <td class="cv">{{ c.curriculum_vitae|linebreaks }}</td>
-                            <td class="vinculacion">{{ c.bonding|linebreaks }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </label>
-                </li>
-            {% endfor %}
-            <br/>
-            <li><label><input name="blanco" id="blanco" value="blanco" type="checkbox"> Voto en blanco </label></li>
-        </ul>
-        <input name="submit" value="registrar" type="submit" onclick="return confirmaVoto()">
-        <input type="reset" value="desmarcar todo" ">
-    </form>
-    <br/>
-    <br/>
+    <main class="main-content">
+        <!--== Start Page Header Area Wrapper ==-->
+        <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="assets/img/photos/bg2.jpg">
+            <div class="container pt--0 pb--0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-header-content">
+                            <h2 class="title">Papeleta Votaciones</h2>
+                            <nav class="breadcrumb-area">
+                                <ul class="breadcrumb justify-content-center">
+                                    <li><a href="{% url 'index' %}">Inicio</a></li>
+                                    <li class="breadcrumb-sep">//</li>
+                                    <li>Votaciones</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--== End Page Header Area Wrapper ==-->
+
+        <!--== Start Team Area Wrapper ==-->
+        <section class="team-area team-inner2-area">
+            {{ cruces }}
+            <form id="frm" method="post" action="./registrar/" style="display:inline;">
+                {% csrf_token %}
+                <div class="container">
+                    <div class="row">
+                        {% for candidato in circ.candidatos_ordenados %}
+                            <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                                <!--== Start Team Item ==-->
+                                <div class="team-item">
+                                    <div class="thumb">
+                                        <img src="{% static 'img/team/1.jpg' %}" width="160" height="160"
+                                             alt="Image-HasTech">
+                                    </div>
+                                    <div class="content">
+                                        <h4 class="title">{{ candidato }}</h4>
+                                        <h5 class="sub-title">{{ candidato.email }}</h5>
+                                        <p class="desc">Antiguedad: {{ candidato.locality }}</p>
+                                        <p class="desc">Antiguedad: {{ candidato.seniority_date|date:"Y" }}</p>
+                                        <p class="desc">{% if candidato.on_the_council %}
+                                            Esta persona pertenece al Consejo en la actualidad y su participación se
+                                            puede ver en los detalles.
+                                        {% else %}
+                                            Esta persona no pertenece al Consejo en la actualidad
+                                        {% endif %}</p>
+                                        <input name="cdto_{{ candidato.id }}" value={{ candidato.id }} type="checkbox"
+                                                {% if c.pk in cruces %} checked="checked"
+                                                {% endif %}>
+                                    </div>
+                                    <div class="bookmark-icon"><img src="{% static 'img/icons/bookmark1.png' %}"
+                                                                    alt="Image-HasTech">
+                                    </div>
+                                    <div class="bookmark-icon-hover"><img
+                                            src="{% static 'img/icons/bookmark2.png' %}"
+                                            alt="Image-HasTech"></div>
+                                </div>
+                                <!--== End Team Item ==-->
+                            </div>
+                        {% endfor %}
+                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                            <!--== Start Team Item ==-->
+                            <div class="team-item">
+                                <div class="thumb">
+                                    <img src="{% static 'img/team/1.jpg' %}" width="160" height="160"
+                                         alt="Image-HasTech">
+                                </div>
+                                <div class="content">
+                                    <h4 class="title">Voto en blanco</h4>
+                                    <input name="blanco" id="blanco" value="blanco" type="checkbox">
+                                </div>
+                                <div class="bookmark-icon"><img src="{% static 'img/icons/bookmark1.png' %}"
+                                                                alt="Image-HasTech">
+                                </div>
+                                <div class="bookmark-icon-hover"><img
+                                        src="{% static 'img/icons/bookmark2.png' %}"
+                                        alt="Image-HasTech"></div>
+                            </div>
+                            <!--== End Team Item ==-->
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb--0">
+                            <input class="btn-theme d-block w-100" type="submit" name="submit" value="Votar"
+                                   onclick="return confirmaVoto()"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="margin-top: 20px;">
+                        <div class="form-group mb--0">
+                            <input class="btn-theme d-block w-100" type="reset" value="Desmarcar todo"/>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </section>
+        <!--== End Team Area Wrapper ==-->
+    </main>
+
 {% endblock %}
