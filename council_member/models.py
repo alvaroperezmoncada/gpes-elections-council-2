@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-
-
 # Create your models here.
+from django.utils import timezone
+
 from associate.utils import claveAleatoria
 from core import settings
 
@@ -28,6 +28,26 @@ class CouncilMember(models.Model):
             self.clave = claveAleatoria()
             self.save()
         return self.clave
+
+    def fecha_voto_legible(self):
+        return self.voting_date.strftime("%H:%M %d-%m-%Y")
+
+    def can_vote(self):
+        if self.voting_date:
+            return False, 'Ya se ha registrado un voto'
+        return True, ''
+
+    def registraVoto(self, usuario):
+        assert self.can_vote()[0]
+        self.circumscription_vote_id = 19
+        self.usuario = usuario
+        self.fecha_voto = timezone.now()
+
+    def desregistraVoto(self):
+        assert not self.can_vote()[0]
+        self.voting_date = None
+        self.circumscription_vote_id = None
+        self.user = None
 
     class Meta:
         verbose_name = 'Miembro del consejo'
