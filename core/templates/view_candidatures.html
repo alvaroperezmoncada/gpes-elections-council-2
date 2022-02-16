@@ -37,7 +37,7 @@
                                 <div class="team-item">
                                     <div class="thumb">
                                         <a href="{% url 'candidate-details' num=candidato.pk %}">
-                                            <img src="{% thumbnail candidato.photo %}" width="160" height="160"
+                                            <img src="{% thumbnail candidato.photo 100x100 %}" width="160" height="160"
                                                  alt="Image-HasTech">
                                         </a>
                                     </div>
