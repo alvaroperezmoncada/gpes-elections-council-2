@@ -92,6 +92,27 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # }
 
 pymysql.install_as_MySQLdb()
+if os.getenv('GAE_APPLICATION', None):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': '',
+            'NAME': '',
+            'USER': '',
+            'PASSWORD': '',
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': '',
+            'PORT': '3306',
+            'NAME': '',
+            'USER': '',
+            'PASSWORD': '',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

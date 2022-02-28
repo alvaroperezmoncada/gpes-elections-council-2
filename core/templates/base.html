@@ -61,7 +61,12 @@
                             <div class="header-navigation-area position-relative">
                                 <ul class="main-menu nav">
                                     <li><a href={% url 'index' %}><span></span></a></li>
-
+                                    {% if user.is_authenticated %}
+                                        <li class="has-submenu"><a href="{% url 'commision60' %}"><span>Comisión Socios</span></a></li>
+                                        <li class="has-submenu"><a href="{% url 'recuento60' %}"><span>Recuento Socios</span></a></li>
+                                        <li class="has-submenu"><a href="{% url 'recuento15' %}"><span>Recuento Consejeros</span></a>
+                                        </li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
