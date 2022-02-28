@@ -23,6 +23,9 @@ class CouncilMember(models.Model):
     email = models.EmailField(null=True, blank=True, verbose_name='Dirección de correo electrónico')
     password = models.CharField(max_length=50, null=True, blank=True, verbose_name='Clave')
 
+    def __str__(self):
+        return f'{self.lastname or ""} {self.firstname or ""}'
+
     def get_clave(self):
         if not self.password or not len(self.password) == settings.LONGITUD_CLAVE:
             self.clave = claveAleatoria()

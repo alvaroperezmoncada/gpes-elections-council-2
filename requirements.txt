@@ -1,5 +1,5 @@
 django~=3.2.7
 pillow~=8.4.0
 simple-salesforce
-
+pandas
 PyMySQL~=1.0.2

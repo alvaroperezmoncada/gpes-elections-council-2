@@ -62,9 +62,10 @@
                                 <ul class="main-menu nav">
                                     <li><a href={% url 'index' %}><span></span></a></li>
                                     {% if user.is_authenticated %}
-                                        <li class="has-submenu"><a href="{% url 'commision60' %}"><span>Comisión Socios</span></a></li>
-                                        <li class="has-submenu"><a href="{% url 'recuento60' %}"><span>Recuento Socios</span></a></li>
-                                        <li class="has-submenu"><a href="{% url 'recuento15' %}"><span>Recuento Consejeros</span></a>
+                                        <li class="has-submenu"><a href="{% url 'commision60' %}"><span>Validación 60</span></a></li>
+                                        <li class="has-submenu"><a href="{% url 'commision15' %}"><span>Validación 15</span></a></li>
+                                        <li class="has-submenu"><a href="{% url 'recuento60' %}"><span>Recuento 60</span></a></li>
+                                        <li class="has-submenu"><a href="{% url 'recuento15' %}"><span>Recuento 15</span></a>
                                         </li>
                                     {% endif %}
                                 </ul>
