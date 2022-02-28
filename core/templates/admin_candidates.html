@@ -36,7 +36,7 @@
                                 <div class="team-item">
                                     <div class="thumb">
                                         <a href="{% url 'candidate-edit' num=candidato.pk %}">
-                                            <img src="{% static 'img/team/1.jpg' %}" width="160" height="160"
+                                            <img src="{{ candidato.photo.url }}" width="160" height="160"
                                                  alt="Image-HasTech">
                                         </a>
                                     </div>

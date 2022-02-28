@@ -13,21 +13,21 @@ class Circumscription(models.Model):
         return self.ds
 
     def cuentaPapeletas(self):
-        return self.papeleta_set.count()
+        return self.ballot_circumscription_set.count()
 
     def cuentaPapeletasVerificadas(self):
         if self.id == 19:
-            return self.circunscripcion_voto_15.count()
-        return self.circunscripcion_voto_60.count()
+            return self.council_member_circumscription_set.count()
+        return self.associate_circumscription_vote_set.count()
 
     def cuentaVotoBlanco(self):
-        return self.papeleta_set.filter(voto_blanco=True).count()
+        return self.ballot_circumscription_set.filter(blank_vote=True).count()
 
     def cuentaVotoNulo(self):
-        return self.papeleta_set.filter(voto_nulo=True).count()
+        return self.ballot_circumscription_set.filter(null_vote=True).count()
 
     def cuentaVotantes(self):
-        return self.socio_set.count()
+        return self.associate_circumscription_set.count()
 
     def indiceParticipacion(self):
         if self.cuentaVotantes():
@@ -50,13 +50,13 @@ class Circumscription(models.Model):
         return ret
 
     def candidatos_ordenados_60(self):
-        return self.candidatos_ordenados().filter(tipo=60)
+        return self.candidatos_ordenados().filter(announcement=60)
 
     def cuenta_candidatos_60(self):
         return self.candidatos_ordenados_60().count()
 
     def candidatos_ordenados_15(self):
-        return self.candidatos_ordenados().filter(tipo=15)
+        return self.candidatos_ordenados().filter(announcement=15)
 
     def cuenta_candidatos_15(self):
         return self.candidatos_ordenados_15().count()

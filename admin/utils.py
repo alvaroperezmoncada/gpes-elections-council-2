@@ -27,7 +27,12 @@ def get_active_modules(request):
     queryset = Deadline.objects.all()
     if not request.user.is_superuser:
         queryset = queryset.filter(start_dt__lte=dt_now, end_dt__gte=dt_now)
-    return queryset.values()
+    return queryset.values().order_by('ds')
+
+
+def is_active_module(request, module):
+    active_modules = get_active_modules(request)
+    return active_modules.filter(module=module)
 
 
 def diff_month(d1, d2):
@@ -35,6 +40,8 @@ def diff_month(d1, d2):
 
 
 def commision(request, _type):
+    if not is_active_module(request, 'comision_%s' % _type) and not request.user.is_superuser:
+        return HttpResponseRedirect('/')
     full = request.GET.get('full', False)
     candidates = Candidature.objects.filter(announcement=_type)
     valid_candidates = candidates.filter(validated=True).order_by('circumscription', 'seniority_date')
@@ -51,6 +58,8 @@ def commision(request, _type):
 
 
 def edit_candidate(request, _type, _id):
+    if not is_active_module(request, 'comision_%s' % _type) and not request.user.is_superuser:
+        return HttpResponseRedirect('/')
     candidate = Candidature.objects.get(pk=_id)
     assert candidate.announcement == _type
 
@@ -204,8 +213,6 @@ def send_pass(request, _type):
         teléfono: 900 535 025, correo electrónico: sociasysocios.es@greenpeace.org.
         Cuando esté resuelto, inténtalo de nuevo. Te esperamos.'''
 
-    print('este es el mensaje', msg)
-
     if msg == '':
         socio, created = Associate.objects.get_or_create(associate_number=num_socio)
         socio.email = info['Email']
@@ -253,7 +260,7 @@ def ballot(request, ca, _type, voting_class):
         assert socio.circumscription.pk == 19 or socio.circumscription == circ
     else:
         max_candidatos = settings.MAX_CANDIDATOS_15
-    return render(request, plantilla, locals())
+    return render(request, 'ballot_pub.html', locals())
 
 
 def register_vote(request, ca, _type, voting_class):
@@ -300,6 +307,11 @@ def register_vote(request, ca, _type, voting_class):
         voto.save()
     msg = u'<span style="font-size:300%;color:green;">Voto registrado</span>'
     messages.add_message(request, messages.SUCCESS, msg)
+    email_text = 'Se ha registrado correctamente tu voto, gracias por participar.'
+    send_mail(
+        u"Registro exitoso, votaciones Greenpeace ", email_text, 'no-reply@greenpeace.es', [usu.email],
+        fail_silently=False
+    )
     return HttpResponseRedirect('/')
 
 
@@ -313,9 +325,9 @@ def results(request, _type):
 def selector(request, _type):
     circ_singular = Circumscription.objects.get(pk=19)
     if _type == 15:
-        papeletas = Ballot.objects.filter(circumscription__id=19).order_by('-fecha_registro')[:5]
+        papeletas = Ballot.objects.filter(circumscription__id=19).order_by('-voting_date')[:5]
         ccaa = Circumscription.objects.filter(id=19)
     else:
-        papeletas = Ballot.objects.all().order_by('-fecha_registro')[:5]
+        papeletas = Ballot.objects.all().order_by('-voting_date')[:5]
         ccaa = Circumscription.objects.all()
     return render(request, 'selector.html', dict(ccaa=ccaa, papeletas=papeletas, tipo=_type))

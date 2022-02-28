@@ -48,7 +48,7 @@ class Candidature(models.Model):
         verbose_name='Miembro del Consejo que presenta al candidato/a: Copia del DNI/ Pasaporte/ Tarjeta de residente',
     )
     photo = models.ImageField(
-        upload_to="core/static/%Y/%m/%d", verbose_name=u'Foto -máximo 200kB-', null=True, blank=True
+        upload_to="%Y/%m/%d", verbose_name=u'Foto -máximo 200kB-', null=True, blank=True
     )
     email = models.EmailField(
         verbose_name='Correo electrónico para facilitar a la comisión electoral la resolución de errores'
@@ -75,6 +75,9 @@ class Candidature(models.Model):
     on_the_council = models.BooleanField(default=False, verbose_name='Actualmente en el Consejo')
     participation = models.TextField(
         max_length=300, blank=True, validators=[MaxLengthValidator(300)], verbose_name='Participación'
+    )
+    habeas_data = models.BooleanField(
+        default=False, verbose_name='Acepta que los datos aquí ingresados sean de uso público'
     )
 
     def __str__(self):

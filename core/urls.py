@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from admin.views import commision60, edit_candidate60, commision15, edit_candidate15, vote60, send_pass60, ballot60, \
-    register_vote60, results60
+    register_vote60, results60, selector60, selector15
 from candidatures.views import presentation60_view, confirm60_view, ok60, presentation15_view, confirm15_view, ok15, \
     allegation60, allegation15, allegate, allegation_ok, view_candidatures60, view_candidatures15, \
     view_candidate_details
@@ -45,10 +45,19 @@ urlpatterns = [
     path('comision_15/<int:num>/', edit_candidate15),
     path('votacion_60/', vote60),
     path('envia_clave_60/', send_pass60),
-    path('papeleta_60/<int:ca>/', ballot60),
+    path('papeleta_60/<int:ca>/', ballot60, name='ballot60'),
     path('papeleta_60/<int:ca>/registrar/', register_vote60),
     path('resultados_60/', results60),
     path('admin/', admin.site.urls),
     path('authenticate/', include('authenticate.urls')),
+
+    path('gpes/60/recuento/', selector60),
+    path('gpes/15/recuento/', selector15),
+    path('gpes/60/verificacion/', results60),
+    path('gpes/15/verificacion/', results60),
+    path('gpes/60/papeleta/<int:ca>/', results60),
+    path('gpes/15/papeleta/<int:ca>/', results60),
 ]
 
+if settings.DEBUG:
+    urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -9,7 +9,7 @@ class NewCandidatureForm(ModelForm):
         model = Candidature
         fields = [
             'firstname', 'lastname', 'locality', 'circumscription', 'curriculum_vitae', 'bonding', 'motivation',
-            'campaign', 'dni', 'dni_number', 'photo', 'email', 'active_participation', 'veracity'
+            'campaign', 'dni', 'dni_number', 'photo', 'email', 'active_participation', 'veracity', 'habeas_data'
         ]
 
     def clean_active_participation(self):
@@ -54,7 +54,7 @@ class NewCandidature15Form(ModelForm):
         model = Candidature
         fields = [
             'presents_it', 'presents_it_dni', 'firstname', 'lastname', 'locality', 'curriculum_vitae', 'bonding', 'dni',
-            'dni_number', 'photo', 'email', 'active_participation', 'veracity'
+            'dni_number', 'photo', 'email', 'active_participation', 'veracity', 'habeas_data'
         ]
 
     def clean_presents_it(self):

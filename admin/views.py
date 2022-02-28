@@ -51,3 +51,7 @@ def results60(request):
 
 def selector60(request):
     return selector(request, 60)
+
+
+def selector15(request):
+    return selector(request, 15)

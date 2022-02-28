@@ -26,7 +26,7 @@ def get_contact(email, dni_number, return_list=False):
         f"""
        SELECT {','.join(params)}
        FROM Contact
-       WHERE DNI__c = '{dni_number}' AND s360a__ContactCodes__c = 'Donor Prospect'
+       WHERE DNI__c = '{dni_number}' AND s360a__ContactCodes__c = 'Active Donor'
        LIMIT {limit}
        """
     )

@@ -8,11 +8,14 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 from admin.salesforce import check_dni_salesforce
+from admin.utils import is_active_module
 from candidatures.forms import NewCandidatureForm, NewCandidatureConfirmForm, NewCandidature15Form
 from candidatures.models import Candidature
 
 
 def presentation(request, _type):
+    if not is_active_module(request, 'presentacion_%s' % _type) and not request.user.is_superuser:
+        return HttpResponseRedirect('/')
     if _type == 60:
         form = NewCandidatureForm
         member = 'Socios'
@@ -29,7 +32,7 @@ def presentation(request, _type):
                 return render(request, 'presentation.html', {'form': form})
 
             if Candidature.objects.filter(dni_number=request.POST.get('dni_number')).count() > 0:
-                message = 'El DNI ya se encuentra registrado'
+                message = 'Ya hay una candidatura registrada con este DNI'
                 messages.add_message(request, messages.ERROR, message)
                 return render(request, 'presentation.html', {'form': form})
             candidate = form.save()
@@ -39,6 +42,8 @@ def presentation(request, _type):
 
 
 def confirm(request, _type):
+    if not is_active_module(request, 'presentacion_%s' % _type) and not request.user.is_superuser:
+        return HttpResponseRedirect('/')
     candidate = Candidature.objects.get(pk=request.session['candidate_id'])
     if request.method == 'POST':  # If the form has been submitted...
         candidate.announcement = _type
@@ -78,6 +83,8 @@ def envia_confirmacion(candidato):
 
 
 def allegation(request, _type):
+    if not is_active_module(request, 'alegaciones_%s' % _type) and not request.user.is_superuser:
+        return HttpResponseRedirect('/')
     candidate = Candidature.objects.filter(announcement=_type)
     valid_candidate = candidate.filter(validated=True).order_by('circumscription', 'seniority_date')
     not_valid_candidate = candidate.exclude(validated=True).order_by('lastname', 'firstname')
@@ -88,6 +95,8 @@ def allegation(request, _type):
 
 
 def view_candidatures(request, _type):
+    if not is_active_module(request, 'presentacion_%s' % _type) and not request.user.is_superuser:
+        return HttpResponseRedirect('/')
     candidates = Candidature.objects.filter(announcement=_type)
     valid_candidates = candidates.filter(validated=True).order_by('circumscription', 'seniority_date')
     ccaa = [(k, list(v)) for (k, v) in groupby(valid_candidates, lambda x: x.circumscription)]
@@ -95,12 +104,12 @@ def view_candidatures(request, _type):
     return render(request, 'view_candidatures.html', context=context)
 
 
-def send_allegation_mail(candidate, msg):
-    ret = f'Se ha recibido una alegación al candidato: {candidate}\n'
+def send_allegation_mail(candidate, msg, email):
+    ret = f'Se ha realizado una alegación al candidato: {candidate}\n'
     ret += f'\n{msg}\nGracias'
     eles = get_user_model().objects.filter(username='eles').first()
     if eles:
-        destinatarios = [eles.email]
+        destinatarios = [eles.email, email]
         send_mail(
             subject=u"Se ha generado una alegación", message=ret, from_email='eleccion.es@greenpeace.org',
             recipient_list=destinatarios,

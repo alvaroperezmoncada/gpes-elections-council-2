@@ -72,7 +72,7 @@ def allegate(request, num):
             candidate.is_allegate = True
             candidate.validated = False
             candidate.save()
-            send_allegation_mail(candidate, msg)
+            send_allegation_mail(candidate, msg, check["Email"])
             return HttpResponseRedirect('/alegacion_ok/')
 
     else:
