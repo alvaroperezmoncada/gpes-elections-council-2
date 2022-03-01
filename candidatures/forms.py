@@ -1,7 +1,16 @@
+from string import Template
+
 from django import forms
 from django.forms import ModelForm, Form
+from django.utils.safestring import mark_safe
 
 from candidatures.models import Candidature
+
+
+class PictureWidget(forms.widgets.Widget):
+    def render(self, name, value, attrs=None, **kwargs):
+        html = Template("""<img src="$link"/>""")
+        return mark_safe(html.substitute(link=value))
 
 
 class NewCandidatureForm(ModelForm):
@@ -11,6 +20,19 @@ class NewCandidatureForm(ModelForm):
             'firstname', 'lastname', 'locality', 'circumscription', 'curriculum_vitae', 'bonding', 'motivation',
             'campaign', 'dni', 'dni_number', 'photo', 'email', 'active_participation', 'veracity', 'habeas_data'
         ]
+        widgets = {
+            'firstname': forms.TextInput(attrs={'class': 'form-control'}),
+            'lastname': forms.TextInput(attrs={'class': 'form-control'}),
+            'locality': forms.TextInput(attrs={'class': 'form-control'}),
+            'circumscription': forms.Select(attrs={'class': 'form-control'}),
+            'curriculum_vitae': forms.Textarea(attrs={'class': 'form-control form-control2'}),
+            'bonding': forms.Textarea(attrs={'class': 'form-control form-control2'}),
+            'motivation': forms.Textarea(attrs={'class': 'form-control form-control2'}),
+            'campaign': forms.Textarea(attrs={'class': 'form-control form-control2'}),
+            'dni_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'active_participation': forms.EmailInput(attrs={'class': 'form-check-input'}),
+        }
 
     def clean_active_participation(self):
         data = self.cleaned_data['active_participation']
@@ -47,6 +69,18 @@ class NewCandidatureConfirmForm(ModelForm):
             'firstname', 'lastname', 'locality', 'circumscription', 'curriculum_vitae', 'bonding', 'motivation',
             'campaign', 'dni_number', 'email'
         ]
+        widgets = {
+            'firstname': forms.TextInput(attrs={'class': 'form-control'}),
+            'lastname': forms.TextInput(attrs={'class': 'form-control'}),
+            'locality': forms.TextInput(attrs={'class': 'form-control'}),
+            'circumscription': forms.Select(attrs={'class': 'form-control'}),
+            'curriculum_vitae': forms.Textarea(attrs={'class': 'form-control form-control2'}),
+            'bonding': forms.Textarea(attrs={'class': 'form-control form-control2'}),
+            'motivation': forms.Textarea(attrs={'class': 'form-control form-control2'}),
+            'campaign': forms.Textarea(attrs={'class': 'form-control form-control2'}),
+            'dni_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
 
 
 class NewCandidature15Form(ModelForm):
@@ -92,5 +126,10 @@ class NewCandidature15Form(ModelForm):
 
 
 class AllegationForm(Form):
-    dni_number = forms.CharField(max_length=200, label='DNI de quien alega')
-    alegacion = forms.CharField(max_length=200, widget=forms.Textarea, label='Alegación')
+    dni_number = forms.CharField(
+        max_length=200, widget=forms.TextInput(attrs={'class': 'form-control'}), label='DNI de quien alega'
+    )
+    alegacion = forms.CharField(
+        max_length=200, widget=forms.Textarea(attrs={'class': 'form-control form-control2'}), label='Alegación'
+    )
+

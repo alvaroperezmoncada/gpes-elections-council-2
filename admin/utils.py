@@ -93,6 +93,7 @@ def edit_candidate(request, _type, _id):
 
                 if _type == 15:
                     candidate.validated_circumscription = True
+
                 elif info['MailingPostalCode']:
                     prefijo = info['MailingPostalCode'][:2]
                     circunscripcion_por_cp = Province.objects.get(prefix_cp=prefijo).circumscription
@@ -104,7 +105,9 @@ def edit_candidate(request, _type, _id):
                     candidate.save()
 
                 candidate.validated_by_system = candidate.validated = (
-                        candidate.is_adult is True and candidate.antiquity_3_years is True
+                    candidate.is_adult is True and candidate.antiquity_3_years is True, candidate.up_to_date,
+                    candidate.validated_circumscription
+
                 )
                 candidate.save()
             else:
@@ -173,15 +176,15 @@ def send_pass(request, _type):
             num_socio = info[u'AlizeConstituentID__c']
             income = info['Income_ultimos_12_meses_CONSEJO__c']
             print(info['Activation_Date__c'])
-            # fecha_alta = parse_date(info['Activation_Date__c'])
+            fecha_alta = parse_date(info['Activation_Date__c'])
             today = datetime.date.today()
-            # meses_active = min(12, diff_month(today, fecha_alta))
-            # if income / meses_active < settings.MIN_INCOME / 12:
-            #     msg = u'''Parece que hay algún problema con el pago de tu cuota,
-            #     por favor, ponte en contacto con nuestra oficina, teléfono: 900 535 025,
-            #     correo electrónico:
-            #     <a href="mailto:sociasysocios.es@greenpeace.org">sociasysocios.es@greenpeace.org</a>.
-            #     Cuando esté resuelto, inténtalo de nuevo. Te esperamos.'''
+            meses_active = min(12, diff_month(today, fecha_alta))
+            if income / meses_active < settings.MIN_INCOME / 12:
+                msg = u'''Parece que hay algún problema con el pago de tu cuota,
+                por favor, ponte en contacto con nuestra oficina, teléfono: 900 535 025,
+                correo electrónico:
+                <a href="mailto:sociasysocios.es@greenpeace.org">sociasysocios.es@greenpeace.org</a>.
+                Cuando esté resuelto, inténtalo de nuevo. Te esperamos.'''
             if info['Birthdate']:
                 fecha_nacimiento = parse_date(info['Birthdate'])
                 if fecha_nacimiento > settings.FECHA_MAXIMA_NACIMIENTO:

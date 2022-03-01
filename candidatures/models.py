@@ -4,7 +4,7 @@ from django.db import models
 
 # Create your models here.
 class Candidature(models.Model):
-    filing_date = models.DateTimeField(auto_now=True, verbose_name='Fecha presentación candidatura')
+    filing_date = models.DateTimeField(auto_now=True, verbose_name='Fecha presentación candidatura', )
     announcement = models.IntegerField(verbose_name='Convocatoria (0=No confirmada)', default=0)
     firstname = models.CharField(max_length=100, verbose_name='Nombre')
     lastname = models.CharField(max_length=100, verbose_name='Apellidos')
@@ -58,7 +58,7 @@ class Candidature(models.Model):
                      'caso de resultar elegido/a, de participar activamente en las tareas que el Consejo tiene '
                      'señaladas o se señalen.'
     )
-    up_to_date = models.BooleanField(default=True, verbose_name='Al corriente de pago')
+    up_to_date = models.BooleanField(default=False, verbose_name='Al corriente de pago')
     veracity = models.BooleanField(verbose_name='Doy fe de la veracidad de los datos')
     is_adult = models.BooleanField(verbose_name='¿Es mayor de edad?', default=False)
     antiquity_3_years = models.BooleanField(verbose_name='Antigüedad > 3 años', default=False)
@@ -77,7 +77,7 @@ class Candidature(models.Model):
         max_length=300, blank=True, validators=[MaxLengthValidator(300)], verbose_name='Participación'
     )
     habeas_data = models.BooleanField(
-        default=False, verbose_name='Acepta que los datos aquí ingresados sean de uso público'
+        default=False, verbose_name='Acepta que los datos aportados serán visibles para los socios de Greenpeace'
     )
 
     def __str__(self):
