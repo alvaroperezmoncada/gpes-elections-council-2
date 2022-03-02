@@ -1,16 +1,7 @@
-from string import Template
-
 from django import forms
 from django.forms import ModelForm, Form
-from django.utils.safestring import mark_safe
 
 from candidatures.models import Candidature
-
-
-class PictureWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None, **kwargs):
-        html = Template("""<img src="$link"/>""")
-        return mark_safe(html.substitute(link=value))
 
 
 class NewCandidatureForm(ModelForm):
@@ -31,7 +22,6 @@ class NewCandidatureForm(ModelForm):
             'campaign': forms.Textarea(attrs={'class': 'form-control form-control2'}),
             'dni_number': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'active_participation': forms.EmailInput(attrs={'class': 'form-check-input'}),
         }
 
     def clean_active_participation(self):
@@ -87,9 +77,20 @@ class NewCandidature15Form(ModelForm):
     class Meta:
         model = Candidature
         fields = [
-            'presents_it', 'presents_it_dni', 'firstname', 'lastname', 'locality', 'curriculum_vitae', 'bonding', 'dni',
-            'dni_number', 'photo', 'email', 'active_participation', 'veracity', 'habeas_data'
+            'presents_it', 'presents_it_dni', 'firstname', 'lastname', 'locality', 'email', 'curriculum_vitae',
+            'bonding', 'dni',
+            'dni_number', 'photo', 'active_participation', 'veracity', 'habeas_data'
         ]
+        widgets = {
+            'presents_it': forms.TextInput(attrs={'class': 'form-control'}),
+            'firstname': forms.TextInput(attrs={'class': 'form-control'}),
+            'lastname': forms.TextInput(attrs={'class': 'form-control'}),
+            'locality': forms.TextInput(attrs={'class': 'form-control'}),
+            'curriculum_vitae': forms.Textarea(attrs={'class': 'form-control form-control2'}),
+            'bonding': forms.Textarea(attrs={'class': 'form-control form-control2'}),
+            'dni_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
 
     def clean_presents_it(self):
         data = self.cleaned_data['presents_it']
@@ -132,4 +133,3 @@ class AllegationForm(Form):
     alegacion = forms.CharField(
         max_length=200, widget=forms.Textarea(attrs={'class': 'form-control form-control2'}), label='Alegación'
     )
-

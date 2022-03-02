@@ -64,4 +64,4 @@ class Circumscription(models.Model):
     class Meta:
         verbose_name = 'Circunscripcion'
         verbose_name_plural = 'Circunscipciones'
-        ordering = ['order', 'ds']
+        ordering = ['ds', 'order']

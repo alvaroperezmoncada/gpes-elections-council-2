@@ -35,13 +35,15 @@
                                 <!--== Start Team Item ==-->
                                 <div class="team-item">
                                     <div class="thumb">
-                                        <a href="{% url 'candidate-edit' num=candidato.pk %}">
+                                        <a href="">
                                             <img src="{{ candidato.photo.url }}" width="160" height="160"
                                                  alt="Image-HasTech">
                                         </a>
                                     </div>
                                     <div class="content">
-                                        <h4 class="title"><a href="{% url 'candidate-edit' num=candidato.pk %}">{{ candidato }}</a></h4>
+                                        <h4 class="title"><a
+                                                href="">{{ candidato }}</a>
+                                        </h4>
                                         <h5 class="sub-title">{{ candidato.email }}</h5>
                                         <p class="desc">Antiguedad: {{ candidato.locality }}</p>
                                         <p class="desc">Antiguedad: {{ candidato.seniority_date|date:"Y" }}</p>
@@ -51,8 +53,13 @@
                                         {% else %}
                                             Esta persona no pertenece al Consejo en la actualidad
                                         {% endif %}</p>
+                                        {% if announcement == 60 %}
                                         <a class="btn-theme btn-white btn-lg"
-                                           href="{% url 'candidate-edit' num=candidato.pk %}">Revisar</a>
+                                           href="{% url 'candidate-edit60' num=candidato.pk %}">Revisar</a>
+                                    {% else %}
+                                        <a class="btn-theme btn-white btn-lg"
+                                           href="{% url 'candidate-edit15' num=candidato.pk %}">Revisar</a>
+                                    {% endif %}
                                     </div>
                                     <div class="bookmark-icon"><img src="{% static 'img/icons/bookmark1.png' %}"
                                                                     alt="Image-HasTech">
@@ -72,15 +79,16 @@
                             <!--== Start Team Item ==-->
                             <div class="team-item">
                                 <div class="thumb">
-                                    <a href="{% url 'candidate-edit' num=candidato.pk %}">
-                                        <img src="{% static 'img/team/1.jpg' %}" width="160" height="160"
+                                    <a href="">
+                                        <img src="{{ candidato.photo.url }}" width="160" height="160"
                                              alt="Image-HasTech">
                                     </a>
                                 </div>
                                 <div class="content">
-                                    <h4 class="title"><a href="{% url 'candidate-edit' num=candidato.pk %}">{{ candidato }}</a></h4>
+                                    <h4 class="title"><a
+                                            href="">{{ candidato }}</a></h4>
                                     <h5 class="sub-title">{{ candidato.email }}</h5>
-                                        <p class="desc">Antiguedad: {{ candidato.locality }}</p>
+                                    <p class="desc">Antiguedad: {{ candidato.locality }}</p>
                                     <p class="desc">Antiguedad: {{ candidato.seniority_date|date:"Y" }}</p>
                                     <p class="desc">{% if candidato.on_the_council %}
                                         Esta persona pertenece al Consejo en la actualidad y su participación se
@@ -88,8 +96,13 @@
                                     {% else %}
                                         Esta persona no pertenece al Consejo en la actualidad
                                     {% endif %}</p>
-                                    <a class="btn-theme btn-white btn-lg"
-                                       href="{% url 'candidate-edit' num=candidato.pk %}">Revisar</a>
+                                    {% if announcement == 60 %}
+                                        <a class="btn-theme btn-white btn-lg"
+                                           href="{% url 'candidate-edit60' num=candidato.pk %}">Revisar</a>
+                                    {% else %}
+                                        <a class="btn-theme btn-white btn-lg"
+                                           href="{% url 'candidate-edit15' num=candidato.pk %}">Revisar</a>
+                                    {% endif %}
                                 </div>
                                 <div class="bookmark-icon"><img src="{% static 'img/icons/bookmark1.png' %}"
                                                                 alt="Image-HasTech">

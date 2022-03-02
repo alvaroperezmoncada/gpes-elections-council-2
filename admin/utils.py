@@ -5,13 +5,14 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.mail import send_mail
 from django.core.validators import EmailValidator
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.dateparse import parse_date
 
 from admin.forms import AdminCandidateForm
-from admin.salesforce import get_contact, MultipleContactsError
+from admin.salesforce import get_contact, MultipleContactsError, searchContacts
 from associate.models import Associate
 from ballot.models import Ballot, Vote
 from candidatures.models import Candidature
@@ -51,7 +52,8 @@ def commision(request, _type):
     context = {
         'ccaa': ccaa,
         'not_valid_candidates': not_valid_candidates,
-        'full': full
+        'full': full,
+        'announcement': _type
     }
 
     return render(request, 'admin_candidates.html', context=context)
@@ -105,8 +107,8 @@ def edit_candidate(request, _type, _id):
                     candidate.save()
 
                 candidate.validated_by_system = candidate.validated = (
-                    candidate.is_adult is True and candidate.antiquity_3_years is True, candidate.up_to_date,
-                    candidate.validated_circumscription
+                        candidate.is_adult is True and candidate.antiquity_3_years is True and candidate.up_to_date is True
+                        and candidate.validated_circumscription is True
 
                 )
                 candidate.save()
@@ -120,6 +122,20 @@ def edit_candidate(request, _type, _id):
 
 def vote(request, _type, voting_class):
     if request.method != 'POST':
+        return render(request, 'vote.html', context={'tipo': _type})
+    dni = request.POST.get('email')
+    if dni:
+        info = get_contact(dni, dni)
+        if info:
+            email_db = info['Email']
+            return render(request, 'vote_confirm.html', context={'tipo': _type, 'email': email_db, 'dni': dni})
+        else:
+            msg = u'''No hay ninguna persona en nuestra base de datos que cumpla esta condición.
+                        Por favor, ponte en contacto con nuestra oficina, teléfono: 900 535 025,
+                        correo electrónico: <a href="mailto:sociasysocios.es@greenpeace.org">sociasysocios.es@greenpeace.org</a>.
+                        Cuando esté resuelto, inténtalo de nuevo. Te esperamos.'''
+            level = messages.WARNING
+            messages.add_message(request, level, msg)
         return render(request, 'vote.html', context={'tipo': _type})
     password = request.POST['clave']
     try:
@@ -136,7 +152,7 @@ def vote(request, _type, voting_class):
 
     request.session['usu%s' % _type] = member.pk
     if _type == 15:
-        return HttpResponseRedirect('/papeleta_%s/%s/' % (_type, 18))
+        return HttpResponseRedirect('/papeleta_%s/%s/' % (_type, 19))
     if _type == 60 and member.circumscription.pk != 19:
         return HttpResponseRedirect('/papeleta_%s/%s/' % (_type, member.circumscription.pk))
     else:
@@ -334,3 +350,60 @@ def selector(request, _type):
         papeletas = Ballot.objects.all().order_by('-voting_date')[:5]
         ccaa = Circumscription.objects.all()
     return render(request, 'selector.html', dict(ccaa=ccaa, papeletas=papeletas, tipo=_type))
+
+
+def checkup(request, _type, voting_class):
+    try:
+        ultimosocio = voting_class.objects.filter(user=request.user).order_by('-voting_date')[0]
+    except IndexError:
+        ultimosocio = None
+    buscado = request.GET.get('buscado', request.session.get('buscado', ''))
+    print('buscado', buscado)
+    # if isinstance(buscado,str):
+    #     buscado=unicode(buscado,'utf8')
+    buscado = buscado.strip()
+    request.session['buscado'] = buscado
+    buscado = buscado.encode('utf-8')
+    if buscado:
+        if voting_class is Associate:
+            res = []
+            infos = get_contact(buscado, buscado, return_list=True)
+            if not infos:
+                infos = searchContacts(buscado)
+            for info in infos:
+                num_socio = info[u'AlizeConstituentID__c']
+                income = info['Income_ultimos_12_meses_CONSEJO__c']
+                fecha_alta = parse_date(info['Activation_Date__c'])
+                socio, _ = Associate.objects.get_or_create(num_socio=num_socio)
+                socio.email = info['Email']
+                socio.dni_number = info['DNI__c'] or 'n/a'
+                socio.birthday = info['Birthdate']
+                socio.firstname = info['Name']
+                if info['MailingPostalCode']:
+                    prefijo = info['MailingPostalCode'][:2]
+                    try:
+                        circunscripcion_por_cp = Province.objects.get(prefix_cp=prefijo).circumscription
+                    except ObjectDoesNotExist:
+                        circunscripcion_por_cp = Circumscription.objects.get(id=19)
+                else:
+                    circunscripcion_por_cp = Circumscription.objects.get(id=19)
+                socio.circunscripcion = circunscripcion_por_cp
+                socio.save()
+                res.append(socio)
+        elif voting_class is CouncilMember:
+            res = voting_class.objects
+            for palabra in buscado.split():
+                res = res.filter(Q(apellidos__icontains=palabra) | Q(nombre__icontains=palabra))[:100]
+    else:
+        res = []
+    if _type == 15:
+        circunscripciones = Circumscription.objects.filter(pk=19)
+    else:
+        circunscripciones = Circumscription.objects.all()
+    c = dict(res=res,
+             ultimosocio=ultimosocio,
+             buscado=buscado,
+             circunscripciones=circunscripciones,
+             tipo=_type,
+             )
+    return render(request, 'verification.html', c)

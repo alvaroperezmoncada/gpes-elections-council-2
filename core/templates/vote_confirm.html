@@ -41,14 +41,36 @@
                                             <div class="form-group">
                                                 <strong><label for="usu">Introduce tu DNI o NIE:</label></strong>
                                             </div>
-                                            <input id="email" name="email" value="{{ email }}"/>
+                                            <input id="email" name="email" value="{{ dni }}"/>
                                         </div>
-
 
                                         <div class="col-md-4" style="margin-top: 10px;">
                                             <div class="form-group mb--0">
                                                 <input class="btn-theme d-block w-100" type="submit"
                                                        value="Solicitar código"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal" tabindex="-1"
+                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Votaciones</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Deseas que te enviemos la clave de votacion a este
+                                                    correo: {{ email }}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="reset" class="btn-theme btn-theme2"
+                                                            data-bs-dismiss="modal">Cancelar
+                                                    </button>
+                                                    <button type="submit" class="btn-theme">Enviar</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -92,6 +114,7 @@
 
                                     <div class="col-md-4" style="margin-top: 10px;">
                                         <div class="form-group mb--0">
+                                            <!-- Button trigger modal -->
                                             <input class="btn-theme d-block w-100" type="submit"
                                                    value="Aceptar"/>
                                         </div>
@@ -116,23 +139,24 @@
         <!--== End Contact Area Wrapper ==-->
     </main>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Votaciones</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Deseas que te enviemos la clave de votacion a este correo:
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn-theme btn-theme2" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn-theme">Enviar</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <button type="button" class="btn-theme d-block w-100" data-bs-toggle="modal"
+            data-bs-target="#exampleModal" id="id01" style="display: none">
+        Aceptar
+    </button>
+
+    <script>
+        $(document).ready(function () {
+            $('#exampleModal').modal('toggle')
+        });
+    </script>
+
+    <script type="text/javascript">
+        function redireccionar() {
+            document.getElementById('id01').style.display = 'active';
+            $("#id01").trigger("click");
+        }
+
+        setTimeout("redireccionar()", 1000); //tiempo expresado en milisegundos
+    </script>
 
 {% endblock %}

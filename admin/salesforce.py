@@ -15,6 +15,19 @@ def check_dni_salesforce(dni):
     return info
 
 
+def searchContacts(search_string):
+    sf = Salesforce(
+
+    )
+    response = sf.search('''find {{{}}} 
+        in name fields 
+        returning contact({} 
+            where s360a__ContactCodes__c = 'Active Donor')
+        limit 100    
+        '''.format(search_string, params))
+    return response['searchRecords']
+
+
 def get_contact(email, dni_number, return_list=False):
     limit = 100 if return_list else 1
     ret = []

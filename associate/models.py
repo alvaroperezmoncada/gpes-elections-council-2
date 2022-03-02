@@ -46,3 +46,4 @@ class Associate(models.Model):
     class Meta:
         verbose_name = 'Socio'
         verbose_name_plural = 'Socios'
+        ordering = ['lastname', 'firstname']

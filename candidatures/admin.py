@@ -7,7 +7,8 @@ from circumscription.models import Circumscription
 
 class CandidatureAdmin(admin.ModelAdmin):
     list_display = (
-        '__str__', 'circumscription', 'validated', 'is_allegate', 'seniority_date', 'announcement', 'cuentaVotos'
+        '__str__', 'dni_number', 'circumscription', 'validated', 'is_allegate', 'seniority_date', 'announcement',
+        'cuentaVotos'
     )
 
 

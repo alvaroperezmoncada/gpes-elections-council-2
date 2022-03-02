@@ -11,6 +11,7 @@ from admin.salesforce import check_dni_salesforce
 from admin.utils import is_active_module
 from candidatures.forms import NewCandidatureForm, NewCandidatureConfirmForm, NewCandidature15Form
 from candidatures.models import Candidature
+from circumscription.models import Circumscription
 
 
 def presentation(request, _type):
@@ -31,7 +32,7 @@ def presentation(request, _type):
                 messages.add_message(request, messages.WARNING, message)
                 return render(request, 'presentation.html', {'form': form})
 
-            if Candidature.objects.filter(dni_number=request.POST.get('dni_number')).count() > 0:
+            if Candidature.objects.filter(dni_number=request.POST.get('dni_number'), announcement=_type).count() > 0:
                 message = 'Ya hay una candidatura registrada con este DNI'
                 messages.add_message(request, messages.ERROR, message)
                 return render(request, 'presentation.html', {'form': form})
@@ -68,7 +69,10 @@ def envia_confirmacion(candidato):
     form = NewCandidatureConfirmForm(instance=candidato)
     ret = u'Se ha recibido la siguiente candidatura al Consejo de Greenpeace España:\n'
     for f in form:
-        ret += '\n%s: %s' % (f.label, f.value())
+        if f.name == 'circumscription':
+            ret += '\n%s: %s' % (f.label, Circumscription.objects.get(pk=f.value()))
+        else:
+            ret += '\n%s: %s' % (f.label, f.value())
     ret += u'\nSi lo consideras necesario, contacta con la Comisión Electoral en eleccion.es@greenpeace.org.\nGracias'
     destinatarios = [form['email'].value()]
     eles = get_user_model().objects.filter(username='eles').first()
