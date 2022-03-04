@@ -82,7 +82,7 @@ class NewCandidature15Form(ModelForm):
             'dni_number', 'photo', 'active_participation', 'veracity', 'habeas_data'
         ]
         widgets = {
-            'presents_it': forms.TextInput(attrs={'class': 'form-control'}),
+            'presents_it': forms.Select(attrs={'class': 'form-control'}),
             'firstname': forms.TextInput(attrs={'class': 'form-control'}),
             'lastname': forms.TextInput(attrs={'class': 'form-control'}),
             'locality': forms.TextInput(attrs={'class': 'form-control'}),
