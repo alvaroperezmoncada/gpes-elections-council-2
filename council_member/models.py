@@ -55,4 +55,4 @@ class CouncilMember(models.Model):
     class Meta:
         verbose_name = 'Miembro del consejo'
         verbose_name_plural = 'Miembros del consejo'
-        ordering = ['firstname', 'lastname']
+        ordering = ['lastname', 'firstname']
