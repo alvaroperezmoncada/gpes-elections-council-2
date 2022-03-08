@@ -84,8 +84,13 @@
                                 <!--== Start Team Item ==-->
                                 <div class="team-item">
                                     <div class="thumb">
-                                        <img src="{{ candidato.photo.url }}" width="160" height="160"
-                                             alt="Image-HasTech">
+                                        {% if candidato.photo %}
+                                            <img src="{{ candidato.photo.url }}" width="160" height="160"
+                                                 alt="Image-HasTech">
+                                        {% else %}
+                                            <img src="{% static 'img/team/1/jpg' %}" width="160" height="160"
+                                                 alt="Image-HasTech">
+                                        {% endif %}
                                     </div>
                                     <div class="content">
                                         <h4 class="title">{{ candidato }}</h4>

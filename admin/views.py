@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from admin.utils import get_active_modules, commision, edit_candidate, vote, send_pass, ballot, register_vote, selector, \
-    results, checkup
+    results
 from associate.models import Associate
 from council_member.models import CouncilMember
 

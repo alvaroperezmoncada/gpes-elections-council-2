@@ -36,7 +36,10 @@ def presentation(request, _type):
                 message = 'Ya hay una candidatura registrada con este DNI'
                 messages.add_message(request, messages.ERROR, message)
                 return render(request, 'presentation.html', {'form': form})
-            candidate = form.save()
+            candidate = form.save(commit=False)
+            if _type == 15:
+                candidate.circumscription_id = 19
+            candidate.save()
             request.session['candidate_id'] = candidate.id
             return HttpResponseRedirect(f'confirmar_{_type}')
     return render(request, 'presentation.html', {'form': form, 'member': member})

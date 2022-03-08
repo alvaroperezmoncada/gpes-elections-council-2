@@ -18,8 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from admin.views import commision60, edit_candidate60, commision15, edit_candidate15, vote60, send_pass60, ballot60, \
-    register_vote60, results60, selector60, selector15, results15, vote15, send_pass15, ballot15, register_vote15, \
-    checkup60
+    register_vote60, results60, selector60, selector15, results15, vote15, send_pass15, ballot15, register_vote15
 from candidatures.views import presentation60_view, confirm60_view, ok60, presentation15_view, confirm15_view, ok15, \
     allegation60, allegation15, allegate, allegation_ok, view_candidatures60, view_candidatures15, \
     view_candidate_details
@@ -59,10 +58,6 @@ urlpatterns = [
 
     path('gpes/60/recuento/', selector60, name='recuento60'),
     path('gpes/15/recuento/', selector15, name='recuento15'),
-    path('gpes/60/verificacion/', checkup60),
-    path('gpes/15/verificacion/', results60),
-    path('gpes/60/papeleta/<int:ca>/', results60),
-    path('gpes/15/papeleta/<int:ca>/', results60),
 ]
 
 if settings.DEBUG:

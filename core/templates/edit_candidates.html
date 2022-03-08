@@ -31,8 +31,13 @@
                         <div class="team-details-wrap">
                             <div class="team-details-info">
                                 <div class="thumb">
-                                    <img src="{{ candidato.photo.url }}" width="130" height="130"
-                                         alt="Image-HasTech">
+                                    {% if candidato.photo %}
+                                        <img src="{{ candidato.photo.url }}" width="130" height="130"
+                                             alt="Image-HasTech">
+                                    {% else %}
+                                        <img src="{% static 'img/team/1/jpg' %}" width="130" height="130"
+                                             alt="Image-HasTech">
+                                    {% endif %}
                                 </div>
                                 <div class="content">
                                     <h4 class="title">{{ candidate }}</h4>

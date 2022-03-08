@@ -36,8 +36,13 @@
                                 <div class="team-item">
                                     <div class="thumb">
                                         <a href="{% url 'allegate' num=candidato.pk %}">
-                                            <img src="{{  candidato.photo.url }}" width="160" height="160"
-                                                 alt="Image-HasTech">
+                                            {% if candidato.photo %}
+                                                <img src="{{ candidato.photo.url }}" width="160" height="160"
+                                                     alt="Image-HasTech">
+                                            {% else %}
+                                                <img src="{% static 'img/team/1/jpg' %}" width="160" height="160"
+                                                     alt="Image-HasTech">
+                                            {% endif %}
                                         </a>
                                     </div>
                                     <div class="content">
@@ -45,7 +50,7 @@
                                                 href="{% url 'allegate' num=candidato.pk %}">{{ candidato }}</a>
                                         </h4>
                                         <h5 class="sub-title">{{ candidato.circumscription }}</h5>
-                                         <p class="desc">Localidad: {{ candidato.locality }}</p>
+                                        <p class="desc">Localidad: {{ candidato.locality }}</p>
                                         <p class="desc">{% if candidato.on_the_council %}
                                             Esta persona pertenece al Consejo en la actualidad y su participación se
                                             puede ver en los detalles.

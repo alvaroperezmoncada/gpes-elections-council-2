@@ -36,8 +36,13 @@
                                 <div class="team-item">
                                     <div class="thumb">
                                         <a href="{% url 'candidate-details' num=candidato.pk %}">
-                                            <img src="{{ candidato.photo.url }}" width="160" height="160"
-                                                 alt="Image-HasTech">
+                                            {% if candidato.photo %}
+                                                <img src="{{ candidato.photo.url }}" width="160" height="160"
+                                                     alt="Image-HasTech">
+                                            {% else %}
+                                                <img src="{% static 'img/team/1/jpg' %}" width="160" height="160"
+                                                     alt="Image-HasTech">
+                                            {% endif %}
                                         </a>
                                     </div>
                                     <div class="content">
@@ -50,7 +55,8 @@
                                         {% else %}
                                             Esta persona no pertenece al Consejo en la actualidad
                                         {% endif %}</p>
-                                        <a class="btn-theme btn-white btn-lg" href="{% url 'candidate-details' num=candidato.pk %}">Ver Candidatura</a>
+                                        <a class="btn-theme btn-white btn-lg"
+                                           href="{% url 'candidate-details' num=candidato.pk %}">Ver Candidatura</a>
                                     </div>
                                     <div class="bookmark-icon"><img src="{% static 'img/icons/bookmark1.png' %}"
                                                                     alt="Image-HasTech">
