@@ -29,9 +29,9 @@ class CouncilMember(models.Model):
 
     def get_clave(self):
         if not self.password or not len(self.password) == settings.LONGITUD_CLAVE:
-            self.clave = claveAleatoria()
+            self.password = claveAleatoria()
             self.save()
-        return self.clave
+        return self.password
 
     def fecha_voto_legible(self):
         return self.voting_date.strftime("%H:%M %d-%m-%Y")
