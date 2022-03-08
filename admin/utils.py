@@ -5,13 +5,14 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.mail import send_mail
 from django.core.validators import EmailValidator
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.dateparse import parse_date
 
 from admin.forms import AdminCandidateForm
-from admin.salesforce import get_contact, MultipleContactsError
+from admin.salesforce import get_contact, MultipleContactsError, searchContacts
 from associate.models import Associate
 from ballot.models import Ballot, Vote
 from candidatures.models import Candidature
@@ -124,17 +125,30 @@ def vote(request, _type, voting_class):
         return render(request, 'vote.html', context={'tipo': _type})
     dni = request.POST.get('email')
     if dni:
-        info = get_contact(dni, dni)
-        if info:
-            email_db = info['Email']
-            return render(request, 'vote_confirm.html', context={'tipo': _type, 'email': email_db, 'dni': dni})
+        if _type == 60:
+            info = get_contact(dni, dni)
+            if info:
+                email_db = info['Email']
+                return render(request, 'vote_confirm.html', context={'tipo': _type, 'email': email_db, 'dni': dni})
+            else:
+                msg = u'''No hay ninguna persona en nuestra base de datos que cumpla esta condición.
+                            Por favor, ponte en contacto con nuestra oficina, teléfono: 900 535 025,
+                            correo electrónico: <a href="mailto:sociasysocios.es@greenpeace.org">sociasysocios.es@greenpeace.org</a>.
+                            Cuando esté resuelto, inténtalo de nuevo. Te esperamos.'''
+                level = messages.WARNING
+                messages.add_message(request, level, msg)
         else:
-            msg = u'''No hay ninguna persona en nuestra base de datos que cumpla esta condición.
-                        Por favor, ponte en contacto con nuestra oficina, teléfono: 900 535 025,
-                        correo electrónico: <a href="mailto:sociasysocios.es@greenpeace.org">sociasysocios.es@greenpeace.org</a>.
-                        Cuando esté resuelto, inténtalo de nuevo. Te esperamos.'''
-            level = messages.WARNING
-            messages.add_message(request, level, msg)
+            try:
+                council = CouncilMember.objects.get(dni_number=dni)
+            except CouncilMember.DoesNotExist:
+                msg = u'''No hay ninguna persona en nuestra base de datos que cumpla esta condición.
+                                            Por favor, ponte en contacto con nuestra oficina, teléfono: 900 535 025,
+                                            correo electrónico: <a href="mailto:sociasysocios.es@greenpeace.org">sociasysocios.es@greenpeace.org</a>.
+                                            Cuando esté resuelto, inténtalo de nuevo. Te esperamos.'''
+                level = messages.WARNING
+                messages.add_message(request, level, msg)
+            else:
+                return render(request, 'vote_confirm.html', context={'tipo': _type, 'email': council.email, 'dni': dni})
         return render(request, 'vote.html', context={'tipo': _type})
     password = request.POST['clave']
     try:
@@ -169,11 +183,11 @@ def send_pass(request, _type):
     msg = ''
     if _type == 15:
         try:
-            consejero = CouncilMember.objects.get(user__email=email)
+            consejero = CouncilMember.objects.get(dni_number=email)
             email_text = u'Estimado/a %s\r\nÉsta es tu clave: %s\r\nPuedes votar en https://elecciones.greenpeace.es' % (
                 consejero.firstname, consejero.get_clave())
             send_mail(u"[Greenpeace España/Elecciones] Clave para votar ", email_text, 'no-reply@greenpeace.es',
-                      [consejero.correo_electronico],
+                      [consejero.email],
                       fail_silently=False)
             msg = u'Por favor, verifica tu buzón de correo. En breve te llegará un mensaje con la clave para votar.'
             level = messages.SUCCESS
@@ -349,3 +363,4 @@ def selector(request, _type):
         papeletas = Ballot.objects.all().order_by('-voting_date')[:5]
         ccaa = Circumscription.objects.all()
     return render(request, 'selector.html', dict(ccaa=ccaa, papeletas=papeletas, tipo=_type))
+

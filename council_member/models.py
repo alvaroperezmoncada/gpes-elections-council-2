@@ -10,6 +10,7 @@ from core import settings
 class CouncilMember(models.Model):
     firstname = models.CharField(max_length=200, null=True, blank=True, verbose_name='Nombre')
     lastname = models.CharField(max_length=200, null=True, blank=True, verbose_name='Apellidos')
+    dni_number = models.CharField(max_length=200, blank=True, verbose_name='Documento de indentidad')
     user = models.OneToOneField(
         get_user_model(), on_delete=models.CASCADE, related_name='council_member_user_set', verbose_name='Usuario',
         null=True, blank=True

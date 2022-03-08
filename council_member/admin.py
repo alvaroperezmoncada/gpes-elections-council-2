@@ -5,7 +5,7 @@ from council_member.models import CouncilMember
 
 
 class CouncilMemberAdmin(admin.ModelAdmin):
-    list_display = ('id', '__str__')
+    list_display = ('__str__', 'dni_number', 'email')
 
 
 admin.site.register(CouncilMember, CouncilMemberAdmin)
