@@ -77,6 +77,3 @@ def selector60(request):
 def selector15(request):
     return selector(request, 15)
 
-
-def checkup60(request):
-    return checkup(request, 60, Associate)

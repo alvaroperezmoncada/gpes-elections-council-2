@@ -1,7 +1,50 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body %}
-    <p>Tu alegación está presentada. Gracias por todo. Para cualquier duda,
-        puedes ponerte en contacto con la Comisión Electoral, enviando un mensaje a <a
-                href="mailto:eleccion.es@greenpeace.org">eleccion.es@greenpeace.org</a>.</p>
+    <main class="main-content">
+        <!--== Start Page Header Area Wrapper ==-->
+        <div class="page-header-area sec-overlay sec-overlay-black"
+             data-bg-img="{% static 'img/fondo4.png' %}">
+            <div class="container pt--0 pb--0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-header-content">
+                            <h2 class="title">Alegaciones</h2>
+                            <nav class="breadcrumb-area">
+                                <ul class="breadcrumb justify-content-center">
+                                    <li><a href="./">Inicio</a></li>
+                                    <li class="breadcrumb-sep">//</li>
+                                    <li>Alegaciones</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--== End Page Header Area Wrapper ==-->
+
+        <!--== Start Contact Area Wrapper ==-->
+        <section class="contact-area contact-page-area">
+            <div class="container">
+                <div class="row contact-page-wrapper">
+                    <div class="col-lg-12">
+                        <!--== Start Contact Form ==-->
+                        <div class="contact-form login-register-form">
+                            <h4 class="contact-form-title">
+                                Tu alegación está presentada. Gracias por todo. Para cualquier duda,
+                                puedes ponerte en contacto con la Comisión Electoral, enviando un mensaje a <a
+                                    href="mailto:eleccion.es@greenpeace.org">eleccion.es@greenpeace.org</a>.
+                            </h4>
+                        </div>
+                        <!--== End Contact Form ==-->
+
+                        <!--== Message Notification ==-->
+                        <div class="form-message"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--== End Contact Area Wrapper ==-->
+    </main>
 {% endblock %}
