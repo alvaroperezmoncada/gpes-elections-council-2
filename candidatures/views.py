@@ -3,12 +3,18 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 from admin.salesforce import check_dni_salesforce
-from candidatures.forms import AllegationForm
+from admin.utils import is_active_module
+from associate.models import Associate
+from candidatures.forms import AllegationForm, PreValidateCandidatureForm
 from candidatures.models import Candidature
 from candidatures.utils import presentation, confirm, allegation, view_candidatures, send_allegation_mail
 
 
 # Funciones que controlan las candidaturas de los 60 candidatos.
+from circumscription.models import Circumscription
+from provinces.models import Province
+
+
 def presentation60_view(request):
     return presentation(request, 60)
 
@@ -23,6 +29,44 @@ def ok60(request):
 
 def allegation60(request):
     return allegation(request, 60)
+
+
+def pre_validate_candidatures60(request):
+    if not is_active_module(request, 'presentacion_60') and not request.user.is_superuser:
+        return HttpResponseRedirect('/')
+
+    if request.method == 'POST':
+        form = PreValidateCandidatureForm(request.POST)
+        if form.is_valid():
+            check = check_dni_salesforce(request.POST.get('dni_number'))
+            if not check:
+                message = 'El DNI introducido no corresponde a ningún socio en activo, se puede actualizar en ' \
+                          'la WEB de Greenpeace en Mi Perfil https://miperfil.greenpeace.es/'
+                messages.add_message(request, messages.WARNING, message)
+                return render(request, 'pre_validate_candidatures.html', {'form': form})
+
+            socio, created = Associate.objects.get_or_create(associate_number=check[u'AlizeConstituentID__c'])
+            socio.email = check['Email']
+            socio.firstname = check['Name']
+            if check['MailingPostalCode']:
+                prefijo = check['MailingPostalCode'][:2]
+                try:
+                    circunscripcion_por_cp = Province.objects.get(prefix_cp=prefijo).circumscription
+                except Province.DoesNotExist:
+                    circunscripcion_por_cp = Circumscription.objects.get(id=19)
+            else:
+                circunscripcion_por_cp = Circumscription.objects.get(id=19)
+            socio.circumscription = circunscripcion_por_cp
+            socio.save()
+
+            request.session['associate_id'] = socio.pk
+            return HttpResponseRedirect('/ver_candidaturas_60_validated/')
+
+    else:
+        form = PreValidateCandidatureForm()
+
+    context = {'form': form}
+    return render(request, 'pre_validate_candidatures.html', context)
 
 
 def view_candidatures60(request):

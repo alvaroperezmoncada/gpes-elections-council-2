@@ -4,6 +4,16 @@ from django.forms import ModelForm, Form
 from candidatures.models import Candidature
 
 
+class PreValidateCandidatureForm(Form):
+    dni_number = forms.CharField(
+        max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'DNI'}), label='DNI'
+    )
+    postal_code = forms.CharField(
+        max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Código postal'}),
+        label='Código postal'
+    )
+
+
 class NewCandidatureForm(ModelForm):
     class Meta:
         model = Candidature

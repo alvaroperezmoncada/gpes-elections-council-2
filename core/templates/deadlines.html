@@ -20,21 +20,17 @@
                                 <div class="row justify-content-center align-items-center">
                                     <div class="col-12 col-lg-8">
                                         <div class="slider-content">
-                                            <h2 class="title">Los plazos del proceso electoral son éstos:</h2>
-                                            <h3 style="color: #fefefe">Personas del Consejo elegidas por socias y
-                                                socios</h3>
-                                            <p class="desc">Presentación de candidaturas: Del xxxx al xxxx</p>
-                                            <p class="desc">Alegaciones: Del xxxx al xxxx</p>
-                                            <p class="desc">Votaciones: Del xxxx al xxxx</p>
-                                            <p class="desc">Resultados: Del xxxx al xxxx</p>
-                                            <hr class="title">
-                                            <h3 style="color: #fefefe">Personas del Consejo elegidas por consejeras y
-                                                consejeros</h3>
-                                            <p class="desc">Presentación de candidaturas: Del xxxx al xxxx</p>
-                                            <p class="desc">Alegaciones: Del xxxx al xxxx</p>
-                                            <p class="desc">Votaciones: Del xxxx al xxxx</p>
-                                            <p class="desc">Resultados: Del xxxx al xxxx</p>
-                                            <p class="desc">Asamblea: Del xxxx al xxxx</p>
+                                            {% if modules %}
+                                                <h2 class="title">Los plazos del proceso electoral son éstos:</h2>
+                                                {% for mod in modules %}
+                                                    <p class="desc">{{ mod.ds }}: Del {{ mod.star_dt_humanize }}
+                                                        al {{ mod.end_dt_humanize }}</p>
+                                                {% endfor %}
+                                            {% else %}
+                                                <h2 class="title">
+                                                    Aún no se han definido plazos para el proceso electoral
+                                                </h2>
+                                            {% endif %}
                                         </div>
                                     </div>
 

@@ -21,7 +21,7 @@ from admin.views import commision60, edit_candidate60, commision15, edit_candida
     register_vote60, results60, selector60, selector15, results15, vote15, send_pass15, ballot15, register_vote15
 from candidatures.views import presentation60_view, confirm60_view, ok60, presentation15_view, confirm15_view, ok15, \
     allegation60, allegation15, allegate, allegation_ok, view_candidatures60, view_candidatures15, \
-    view_candidate_details
+    view_candidate_details, pre_validate_candidatures60
 from core import settings
 
 urlpatterns = [
@@ -34,7 +34,8 @@ urlpatterns = [
     path('ok_15', ok15, name='ok15'),
     path('alegaciones_60', allegation60, name='allegation60'),
     path('alegaciones_15', allegation15, name='allegation15'),
-    path('ver_candidaturas_60/', view_candidatures60, name='candidatures60'),
+    path('ver_candidaturas_60/', pre_validate_candidatures60, name='candidatures60'),
+    path('ver_candidaturas_60_validated/', view_candidatures60, name='candidatures60-validated'),
     path('ver_candidaturas_15/', view_candidatures15, name='candidatures15'),
     path('ver_candidaturas/<int:num>', view_candidate_details, name='candidate-details'),
     path('alegacion_ok/', allegation_ok),
@@ -54,7 +55,7 @@ urlpatterns = [
     path('resultados_60/', results60, name='results60'),
     path('resultados_15/', results15, name='results15'),
     path('admin/', admin.site.urls),
-    path('authenticate/', include('authenticate.urls')),
+    path('accounts/', include('authenticate.urls')),
 
     path('gpes/60/recuento/', selector60, name='recuento60'),
     path('gpes/15/recuento/', selector15, name='recuento15'),

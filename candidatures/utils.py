@@ -9,6 +9,7 @@ from django.shortcuts import render
 
 from admin.salesforce import check_dni_salesforce
 from admin.utils import is_active_module
+from associate.models import Associate
 from candidatures.forms import NewCandidatureForm, NewCandidatureConfirmForm, NewCandidature15Form
 from candidatures.models import Candidature
 from circumscription.models import Circumscription
@@ -108,6 +109,12 @@ def view_candidatures(request, _type):
     valid_candidates = candidates.filter(validated=True).order_by('circumscription', 'seniority_date')
     ccaa = [(k, list(v)) for (k, v) in groupby(valid_candidates, lambda x: x.circumscription)]
     context = {'ccaa': ccaa}
+    associate_id = request.session.get('associate_id')
+    if associate_id:
+        member = Associate.objects.get(pk=associate_id)
+        member_circ = valid_candidates.filter(circumscription=member.circumscription)
+        context['member_circ'] = member_circ
+        request.session.pop('associate_id')
     return render(request, 'view_candidatures.html', context=context)
 
 
