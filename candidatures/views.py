@@ -32,7 +32,7 @@ def allegation60(request):
 
 
 def pre_validate_candidatures60(request):
-    if not is_active_module(request, 'presentacion_60') and not request.user.is_superuser:
+    if not is_active_module(request, 'ver_candidaturas_60') and not request.user.is_superuser:
         return HttpResponseRedirect('/')
 
     if request.method == 'POST':

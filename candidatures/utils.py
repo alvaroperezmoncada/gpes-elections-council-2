@@ -103,7 +103,7 @@ def allegation(request, _type):
 
 
 def view_candidatures(request, _type):
-    if not is_active_module(request, 'presentacion_%s' % _type) and not request.user.is_superuser:
+    if not is_active_module(request, 'ver_candidaturas_%s' % _type) and not request.user.is_superuser:
         return HttpResponseRedirect('/')
     candidates = Candidature.objects.filter(announcement=_type)
     valid_candidates = candidates.filter(validated=True).order_by('circumscription', 'seniority_date')
