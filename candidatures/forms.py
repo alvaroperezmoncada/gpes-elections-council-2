@@ -88,8 +88,8 @@ class NewCandidature15Form(ModelForm):
         model = Candidature
         fields = [
             'presents_it', 'presents_it_dni', 'firstname', 'lastname', 'locality', 'email', 'curriculum_vitae',
-            'bonding', 'dni',
-            'dni_number', 'photo', 'active_participation', 'veracity', 'habeas_data'
+            'bonding', 'motivation', 'campaign', 'dni', 'dni_number', 'photo', 'active_participation', 'veracity',
+            'habeas_data'
         ]
         widgets = {
             'presents_it': forms.Select(attrs={'class': 'form-control'}),

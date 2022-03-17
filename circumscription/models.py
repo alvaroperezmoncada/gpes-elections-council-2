@@ -8,6 +8,7 @@ class Circumscription(models.Model):
     cod_ine = models.CharField(max_length=2, verbose_name='Cod. ine')
     places = models.IntegerField(verbose_name='Puestos')
     order = models.IntegerField(verbose_name='Orden')
+    associate_number = models.IntegerField(verbose_name='Número de socios')
 
     def __str__(self):
         return self.ds

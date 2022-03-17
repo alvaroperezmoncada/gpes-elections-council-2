@@ -54,9 +54,8 @@ class Candidature(models.Model):
         verbose_name='Correo electrónico para facilitar a la comisión electoral la resolución de errores'
     )
     active_participation = models.BooleanField(
-        verbose_name='Compromiso de participación activa: Al presentar esta candidatura adquiero el compromiso, en '
-                     'caso de resultar elegido/a, de participar activamente en las tareas que el Consejo tiene '
-                     'señaladas o se señalen.'
+        verbose_name='La candidatura presentada se compromete, en caso de resultar elegido/a, de participar '
+                     'activamente en las tareas que el Consejo tiene asignadas.'
     )
     up_to_date = models.BooleanField(default=False, verbose_name='Al corriente de pago')
     veracity = models.BooleanField(verbose_name='Doy fe de la veracidad de los datos')
