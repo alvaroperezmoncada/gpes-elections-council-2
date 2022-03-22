@@ -21,7 +21,7 @@ from admin.views import commision60, edit_candidate60, commision15, edit_candida
     register_vote60, results60, selector60, selector15, results15, vote15, send_pass15, ballot15, register_vote15
 from candidatures.views import presentation60_view, confirm60_view, ok60, presentation15_view, confirm15_view, ok15, \
     allegation60, allegation15, allegate, allegation_ok, view_candidatures60, view_candidatures15, \
-    view_candidate_details, pre_validate_candidatures60
+    view_candidate_details, pre_validate_candidatures60, pre_validate_candidatures15
 from core import settings
 
 urlpatterns = [
@@ -36,7 +36,7 @@ urlpatterns = [
     path('alegaciones_15', allegation15, name='allegation15'),
     path('ver_candidaturas_60/', pre_validate_candidatures60, name='candidatures60'),
     path('ver_candidaturas_60_validated/', view_candidatures60, name='candidatures60-validated'),
-    path('ver_candidaturas_15/', view_candidatures15, name='candidatures15'),
+    path('ver_candidaturas_15/', pre_validate_candidatures15, name='candidatures15'),
     path('ver_candidaturas_15_validated/', view_candidatures60, name='candidatures15-validated'),
     path('ver_candidaturas/<int:num>', view_candidate_details, name='candidate-details'),
     path('alegacion_ok/', allegation_ok),

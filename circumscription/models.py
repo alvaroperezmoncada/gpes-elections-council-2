@@ -42,7 +42,9 @@ class Circumscription(models.Model):
             order_by('seniority_date')
 
     def candidatos_ordenados_por_voto(self):
-        ret = list(self.candidature_circumscription_set.filter(validated=True, announcement__gt=0))
+        ret = list(self.candidature_circumscription_set.filter(
+            validated=True, announcement__gt=0, seniority_date__isnull=False
+        ))
         ret.sort(key=lambda c: (-c.cuentaVotos(), c.seniority_date))
         for n, c in enumerate(ret):
             c.electo = (n < (self.places or 15) and c.cuentaVotos())

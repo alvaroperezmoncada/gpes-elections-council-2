@@ -10,15 +10,24 @@ class MultipleContactsError(RuntimeError):
     pass
 
 
+def salesforce_object():
+    return Salesforce(
+
+    )
+
+
+def check_dni_and_zip_code(dni, zip_code):
+    info = get_contact_by_dni_zip(dni, zip_code)
+    return info
+
+
 def check_dni_salesforce(dni):
     info = get_contact(dni, dni)
     return info
 
 
 def searchContacts(search_string):
-    sf = Salesforce(
-
-    )
+    sf = salesforce_object()
     response = sf.search('''find {{{}}} 
         in name fields 
         returning contact({} 
@@ -31,9 +40,7 @@ def searchContacts(search_string):
 def get_contact(email, dni_number, return_list=False):
     limit = 100 if return_list else 1
     ret = []
-    sf_conn = Salesforce(
-
-    )
+    sf_conn = salesforce_object()
 
     response = sf_conn.query(
         f"""
@@ -51,4 +58,24 @@ def get_contact(email, dni_number, return_list=False):
 
     if ret and not return_list:
         raise MultipleContactsError()
+    return ret
+
+
+def get_contact_by_dni_zip(dni_number, zip_code):
+    limit = 1
+    ret = []
+    sf_conn = salesforce_object()
+
+    response = sf_conn.query(
+        f"""
+       SELECT {','.join(params)}
+       FROM Contact
+       WHERE DNI__c = '{dni_number}' AND s360a__ContactCodes__c = 'Active Donor' AND MailingPostalCode = '{zip_code}'
+       LIMIT {limit}
+       """
+    )
+    objects = response['records']
+    if len(objects) == 1:
+        return objects[0]
+
     return ret

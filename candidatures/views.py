@@ -39,6 +39,7 @@ def pre_validate_candidatures60(request):
         form = PreValidateCandidatureForm(request.POST)
         if form.is_valid():
             check = check_dni_salesforce(request.POST.get('dni_number'))
+            # check = check_dni_and_zip_code(request.POST.get('dni_number'), request.POST.get('postal_code'))
             if not check:
                 message = 'El DNI introducido no corresponde a ningún socio en activo, se puede actualizar en ' \
                           'la WEB de Greenpeace en Mi Perfil https://miperfil.greenpeace.es/'
@@ -98,7 +99,7 @@ def pre_validate_candidatures15(request):
             socio.save()
 
             request.session['associate_id'] = socio.pk
-            return HttpResponseRedirect('/ver_candidaturas_60_validated/')
+            return HttpResponseRedirect('/ver_candidaturas_15_validated/')
 
     else:
         form = PreValidateCandidatureForm()

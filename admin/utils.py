@@ -184,7 +184,7 @@ def send_pass(request, _type):
     if _type == 15:
         try:
             consejero = CouncilMember.objects.get(dni_number=email)
-            email_text = u'Estimado/a %s\r\nÉsta es tu clave: %s\r\nPuedes votar en https://elecciones.greenpeace.es' % (
+            email_text = u'Estimado/a %s\r\nÉsta es tu clave: %s' % (
                 consejero.firstname, consejero.get_clave())
             send_mail(u"[Greenpeace España/Elecciones] Clave para votar ", email_text, 'no-reply@greenpeace.es',
                       [consejero.email],
