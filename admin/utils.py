@@ -204,7 +204,6 @@ def send_pass(request, _type):
         if info:
             num_socio = info[u'AlizeConstituentID__c']
             income = info['Income_ultimos_12_meses_CONSEJO__c']
-            print(info['Activation_Date__c'])
             fecha_alta = parse_date(info['Activation_Date__c'])
             today = datetime.date.today()
             meses_active = min(12, diff_month(today, fecha_alta))

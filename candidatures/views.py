@@ -2,14 +2,12 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-from admin.salesforce import check_dni_salesforce
+from admin.salesforce import check_dni_salesforce, check_dni_and_zip_code
 from admin.utils import is_active_module
 from associate.models import Associate
 from candidatures.forms import AllegationForm, PreValidateCandidatureForm
 from candidatures.models import Candidature
 from candidatures.utils import presentation, confirm, allegation, view_candidatures, send_allegation_mail
-
-
 # Funciones que controlan las candidaturas de los 60 candidatos.
 from circumscription.models import Circumscription
 from provinces.models import Province
@@ -38,8 +36,8 @@ def pre_validate_candidatures60(request):
     if request.method == 'POST':
         form = PreValidateCandidatureForm(request.POST)
         if form.is_valid():
-            check = check_dni_salesforce(request.POST.get('dni_number'))
-            # check = check_dni_and_zip_code(request.POST.get('dni_number'), request.POST.get('postal_code'))
+            # check = check_dni_salesforce(request.POST.get('dni_number'))
+            check = check_dni_and_zip_code(request.POST.get('dni_number'), request.POST.get('postal_code'))
             if not check:
                 message = 'El DNI introducido no corresponde a ningún socio en activo, se puede actualizar en ' \
                           'la WEB de Greenpeace en Mi Perfil https://miperfil.greenpeace.es/'
@@ -77,7 +75,7 @@ def pre_validate_candidatures15(request):
     if request.method == 'POST':
         form = PreValidateCandidatureForm(request.POST)
         if form.is_valid():
-            check = check_dni_salesforce(request.POST.get('dni_number'))
+            check = check_dni_and_zip_code(request.POST.get('dni_number'), request.POST.get('postal_code'))
             if not check:
                 message = 'El DNI introducido no corresponde a ningún socio en activo, se puede actualizar en ' \
                           'la WEB de Greenpeace en Mi Perfil https://miperfil.greenpeace.es/'

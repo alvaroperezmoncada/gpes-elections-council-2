@@ -32,8 +32,14 @@
                     <div class="col-lg-12">
                         <!--== Start Contact Form ==-->
                         <div class="contact-form login-register-form">
-                            <h4 class="contact-form-title">Para presentar tu candidatura al Consejo de Greenpeace
-                                España, por favor, completa el siguiente formulario.</h4>
+                            {% if member == 'Socios' %}
+                                <h4 class="contact-form-title">Para presentar tu candidatura al Consejo de Greenpeace
+                                    España, por favor, completa el siguiente formulario.</h4>
+                            {% else %}
+                                <h4 class="contact-form-title">Para presentar una candidatura al Consejo de Greenpeace
+                                    España, por favor, completa el siguiente formulario.</h4>
+                            {% endif %}
+
                             <h5>Para cualquier duda o problema, ponte en contacto con la <a>Comisión electoral</a> a
                                 través de esta dirección de correo: <a href="mailto:eleccion.es@greenpeace.org">eleccion.es@greenpeace.org</a>.
                             </h5>
@@ -45,8 +51,10 @@
                                             <div class="form-group">
                                                 {% if field.html_name in 'active_participation, veracity, habeas_data' %}
                                                     <div class="form-check form-switch">
-                                                        <label class="form-check-label" for="{{ field.auto_id }}"><strong>{{ field.label_tag }}</strong></label>
-                                                        <input class="form-check-input" type="checkbox" id="{{ field.auto_id }}" name="{{ field.name }}">
+                                                        <label class="form-check-label"
+                                                               for="{{ field.auto_id }}"><strong>{{ field.label_tag }}</strong></label>
+                                                        <input class="form-check-input" type="checkbox"
+                                                               id="{{ field.auto_id }}" name="{{ field.name }}">
                                                     </div>
                                                 {% else %}
                                                     <strong>{{ field.label_tag }}</strong>
