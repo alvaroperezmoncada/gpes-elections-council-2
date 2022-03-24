@@ -28,7 +28,7 @@ class Circumscription(models.Model):
         return self.ballot_circumscription_set.filter(null_vote=True).count()
 
     def cuentaVotantes(self):
-        return self.associate_circumscription_set.count()
+        return self.associate_number
 
     def indiceParticipacion(self):
         if self.cuentaVotantes():

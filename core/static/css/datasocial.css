@@ -14,3 +14,15 @@
 }
 
 #dataConfirmModal{ background:#FFF;}
+
+.min-padding-top{
+  padding-top: 50px !important;
+}
+
+.min-padding-bot {
+  padding-bottom: 50px !important;
+}
+
+.primary-color {
+  color: #03a84e;
+}
