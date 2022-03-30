@@ -21,4 +21,4 @@ class Deadline(models.Model):
     class Meta:
         verbose_name = 'Plazo'
         verbose_name_plural = 'Plazos'
-        ordering = ('end_dt',)
+        ordering = ('ds',)
