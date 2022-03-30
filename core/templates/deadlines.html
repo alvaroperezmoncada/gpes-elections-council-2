@@ -22,17 +22,17 @@
                                         <div class="slider-content">
                                             {% if modules %}
                                                 <h2 class="title">Los plazos del proceso electoral son éstos:</h2>
-                                                <h3 style="color: #fefefe">Personas del Consejo elegidas por socias y socios</h3>
+                                                <h3 class="primary-color">Personas del Consejo elegidas por socias y socios</h3>
                                                 {% for mod in modules %}
                                                     {% if mod.announcement == 60 %}
                                                         <p class="desc">{{ mod.ds }}: Del {{ mod.star_dt_humanize }}
                                                         al {{ mod.end_dt_humanize }}</p>
                                                     {% endif %}
                                                 {% endfor %}
-                                                <h3 style="color: #fefefe">Personas del Consejo elegidas por consejeras y consejeros</h3>
+                                                <h3 class="primary-color">Personas del Consejo elegidas por consejeras y consejeros</h3>
                                                 {% for mod in modules %}
                                                     {% if mod.announcement == 15 %}
-                                                        <p class="desc">{{ mod.ds }}: Del {{ mod.star_dt_humanize }}
+                                                        <p class="primary-color">{{ mod.ds }}: Del {{ mod.star_dt_humanize }}
                                                         al {{ mod.end_dt_humanize }}</p>
                                                     {% endif %}
                                                 {% endfor %}
