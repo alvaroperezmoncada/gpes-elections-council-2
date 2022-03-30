@@ -32,7 +32,7 @@
                                                 <h3 class="primary-color">Personas del Consejo elegidas por consejeras y consejeros</h3>
                                                 {% for mod in modules %}
                                                     {% if mod.announcement == 15 %}
-                                                        <p class="primary-color">{{ mod.ds }}: Del {{ mod.star_dt_humanize }}
+                                                        <p class="desc">{{ mod.ds }}: Del {{ mod.star_dt_humanize }}
                                                         al {{ mod.end_dt_humanize }}</p>
                                                     {% endif %}
                                                 {% endfor %}
