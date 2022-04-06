@@ -39,30 +39,28 @@
                                         <th scope="col">Consejo</th>
                                     {% endif %}
                                     <th scope="col">Papeletas</th>
-                                    <th scope="col">Blanco</th>
                                     <th scope="col">Participación</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for circ in ccaa %}
-                                    {% if circ.ds != 'n/a' and tipo == 60 %}
-                                        <tr>
+                                    <tr>
+                                        {% if circ.pk != 19 and tipo == 60 %}
                                             <th class="primary-color" scope="row">{{ circ.ds }}</th>
-                                            <td>{{ circ.cuentaVotantes }}</td>
-                                            <td>{{ circ.cuentaPapeletas }}</td>
-                                            <td>{{ circ.cuentaVotoBlanco }}</td>
-                                            <td>{{ circ.indiceParticipacion }}%</td>
-                                        </tr>
-                                    {% else %}
-                                        <tr>
+                                        {% else %}
                                             <th class="primary-color" scope="row">Consejo</th>
-                                            <td>{{ circ.cuentaVotantes }}</td>
-                                            <td>{{ circ.cuentaPapeletas }}</td>
-                                            <td>{{ circ.cuentaVotoBlanco }}</td>
-                                            <td>{{ circ.indiceParticipacion }}%</td>
-                                        </tr>
-                                    {% endif %}
+                                        {% endif %}
+                                        <td>{{ circ.cuentaVotantes }}</td>
+                                        <td>{{ circ.cuentaPapeletas }}</td>
+                                        <td>{{ circ.indiceParticipacion }}%</td>
+                                    </tr>
                                 {% endfor %}
+                                <tr>
+                                    <th scope="row">Total</th>
+                                    <td>{{ total_socios }}</td>
+                                    <td>{{ total_papeletas }}</td>
+                                    <td>{{ indice_total }}%</td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -84,7 +82,7 @@
                         <!--== Start Contact Form ==-->
                         <div class="contact-form login-register-form">
                             {% for circ in ccaa %}
-                                {% if circ.ds != 'n/a' and tipo == 60 %}
+                                {% if circ.pk != 19 and tipo == 60 %}
                                     <h4 class="primary-color">{{ circ }}</h4>
                                     <table class="table table-bordered">
                                         <thead>

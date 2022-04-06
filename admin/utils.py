@@ -349,17 +349,33 @@ def register_vote(request, ca, _type, voting_class):
 def results(request, _type):
     circumscription = Circumscription.objects.all()
     ccaa = circumscription.exclude(pk=19) if _type == 60 else circumscription.filter(pk=19)
-    c = dict(ccaa=ccaa)
+    c = dict(ccaa=ccaa, tipo=_type)
     return render(request, 'results.html', c)
 
 
 def selector(request, _type):
-    circ_singular = Circumscription.objects.get(pk=19)
     if _type == 15:
-        papeletas = Ballot.objects.filter(circumscription__id=19).order_by('-voting_date')[:5]
         ccaa = Circumscription.objects.filter(id=19)
     else:
-        papeletas = Ballot.objects.all().order_by('-voting_date')[:5]
-        ccaa = Circumscription.objects.all()
-    return render(request, 'selector.html', dict(ccaa=ccaa, papeletas=papeletas, tipo=_type))
+        ccaa = Circumscription.objects.exclude(id=19)
+
+    total_papeletas = 0
+    total_socios = 0
+    indice_total = 'n/a'
+
+    for circ in ccaa:
+        votantes = circ.cuentaVotantes()
+        papeletas = circ.cuentaPapeletas()
+        total_socios += votantes
+        total_papeletas += papeletas
+
+    if total_socios > 0:
+        ret = round(100.0 * total_papeletas / total_socios, 2)
+        indice_total = ('%0.2f' % (ret,)).replace('.', ',')
+
+    return render(
+        request, 'selector.html', dict(
+            ccaa=ccaa, tipo=_type, total_papeletas=total_papeletas, total_socios=total_socios, indice_total=indice_total
+        )
+    )
 
