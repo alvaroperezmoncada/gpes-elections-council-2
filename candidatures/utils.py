@@ -20,10 +20,10 @@ def presentation(request, _type):
         return HttpResponseRedirect('/')
     if _type == 60:
         form = NewCandidatureForm
-        member = 'Socios'
+        member = 'Socias/os'
     else:
         form = NewCandidature15Form
-        member = 'Consejeros'
+        member = 'Consejeras/os'
     if request.method == 'POST':
         form = form(request.POST, request.FILES)
         if form.is_valid():

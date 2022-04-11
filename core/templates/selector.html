@@ -54,8 +54,8 @@
                                             <th class="primary-color" scope="row">Consejo</th>
                                         {% endif %}
                                         {% language 'es' %}
-                                            <td>{{ circ.cuentaVotantes | intcomma }}</td>
-                                            <td>{{ circ.cuentaPapeletas | intcomma }}</td>
+                                            <td class="text-center">{{ circ.cuentaVotantes | intcomma }}</td>
+                                            <td class="text-center">{{ circ.cuentaPapeletas | intcomma }}</td>
                                         {% endlanguage %}
                                         <td>{{ circ.indiceParticipacion }}%</td>
                                     </tr>
@@ -63,8 +63,8 @@
                                 <tr>
                                     <th scope="row">Total</th>
                                     {% language 'es' %}
-                                        <td>{{ total_socios | intcomma }}</td>
-                                        <td>{{ total_papeletas |intcomma }}</td>
+                                        <td class="text-center">{{ total_socios | intcomma }}</td>
+                                        <td class="text-center">{{ total_papeletas |intcomma }}</td>
                                     {% endlanguage %}
                                     <td>{{ indice_total }}%</td>
                                 </tr>

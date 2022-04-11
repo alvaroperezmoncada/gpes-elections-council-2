@@ -9,12 +9,16 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-header-content">
-                            <h2 class="title">Candidatos</h2>
+                            {% if tipo == 60 %}
+                            <h2 class="title">Candidaturas Socias/os</h2>
+                            {% else %}
+                            <h2 class="title">Candidaturas Consejo</h2>
+                            {% endif %}
                             <nav class="breadcrumb-area">
                                 <ul class="breadcrumb justify-content-center">
                                     <li><a href="{% url 'index' %}">Inicio</a></li>
                                     <li class="breadcrumb-sep">//</li>
-                                    <li>Candidatos</li>
+                                    <li>Candidaturas</li>
                                 </ul>
                             </nav>
                         </div>
