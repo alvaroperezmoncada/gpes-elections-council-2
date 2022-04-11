@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
+{% load i18n %}
+{% load l10n %}
 {% block body %}
     <main class="main-content">
         <!--== Start Page Header Area Wrapper ==-->
@@ -50,15 +53,19 @@
                                         {% else %}
                                             <th class="primary-color" scope="row">Consejo</th>
                                         {% endif %}
-                                        <td>{{ circ.cuentaVotantes }}</td>
-                                        <td>{{ circ.cuentaPapeletas }}</td>
+                                        {% language 'es' %}
+                                            <td>{{ circ.cuentaVotantes | intcomma }}</td>
+                                            <td>{{ circ.cuentaPapeletas | intcomma }}</td>
+                                        {% endlanguage %}
                                         <td>{{ circ.indiceParticipacion }}%</td>
                                     </tr>
                                 {% endfor %}
                                 <tr>
                                     <th scope="row">Total</th>
-                                    <td>{{ total_socios }}</td>
-                                    <td>{{ total_papeletas }}</td>
+                                    {% language 'es' %}
+                                        <td>{{ total_socios | intcomma }}</td>
+                                        <td>{{ total_papeletas |intcomma }}</td>
+                                    {% endlanguage %}
                                     <td>{{ indice_total }}%</td>
                                 </tr>
                                 </tbody>
