@@ -169,6 +169,7 @@ THOUSAND_SEPARATOR = '.'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+STATIC_ROOT = "static"
 STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
@@ -181,6 +182,8 @@ MEDIA_ROOT = (
 )
 
 MEDIA_URL = '/media/'
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -198,8 +201,8 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = ''  # this is exactly the value 'apikey'
-EMAIL_HOST_PASSWORD = ''  # this is your API key
+EMAIL_HOST_USER = env("EUSER")  # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = env("EPASS")  # this is your API key
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
