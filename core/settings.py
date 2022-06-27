@@ -191,7 +191,7 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MIN_INCOME = 48
-FECHA_CONVOCATORIA = datetime.date(2021, 11, 30)
+FECHA_CONVOCATORIA = datetime.date(2022, 7, 30)
 FECHA_MAXIMA_NACIMIENTO = datetime.date(2022 - 18, 2, 28)
 FECHA_MAXIMA_ANTIGUEDAD = datetime.date(2022 - 3, 2, 28)
 MAX_CANDIDATOS_15 = 10
