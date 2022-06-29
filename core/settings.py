@@ -178,6 +178,7 @@ STATICFILES_DIRS = (
     BASE_DIR / 'core/static',
 )
 
+
 MEDIA_ROOT = (
     BASE_DIR
 )
