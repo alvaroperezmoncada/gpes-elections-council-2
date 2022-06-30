@@ -86,5 +86,6 @@ def selector15(request):
     return selector(request, 15)
 
 @login_required
-def detalles(request):
+def detalles(request, path):
+    print(path)
     return detalle_prueba(request)
