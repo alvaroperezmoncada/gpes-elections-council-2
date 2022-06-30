@@ -27,12 +27,14 @@
         <section class="team-area team-inner2-area">
             <div class="container">
                 <div class="row">
-                    <h2>Prueba</h2>
-                    
-                </div>
-                <div class="row">
-                    <h2>Pruebas detalles</h2>
-                   
+                    <h2>detalles</h2>
+                    {% if deadline%}
+                        <h3>deadline.ds</h3>
+                        <h3>deadline.module</h3>
+                        <h3>deadline.start_dt</h3>
+                        <h3>deadline.end_dt</h3>
+                        <h3>deadline.announcement</h3>
+                    {% endif %}
                 </div>
             </div>
         </section>

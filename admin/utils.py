@@ -379,8 +379,10 @@ def selector(request, _type):
         )
     )
 
-def detalle_prueba(request):
+def detalle_prueba(request, name):
+    deadline = Deadline.objects.filter(module=name).first()
+    context = {'deadline': deadline}
     return render(
-        request, 'detalles_modulo.html'
+        request, 'detalles_modulo.html', context=context
     )
 
