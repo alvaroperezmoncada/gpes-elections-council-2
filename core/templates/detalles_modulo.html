@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+    <main class="main-content">
+        <!--== Start Page Header Area Wrapper ==-->
+        <div class="page-header-area sec-overlay sec-overlay-black" data-bg-img="{% static 'img/fondo4.png' %}">
+            <div class="container pt--0 pb--0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-header-content">
+                            <h2 class="title">Detalles modulo</h2>
+                            <nav class="breadcrumb-area">
+                                <ul class="breadcrumb justify-content-center">
+                                    <li><a href="{% url 'index' %}">Inicio</a></li>
+                                    <li class="breadcrumb-sep">//</li>
+                                    <li>Detalles</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--== End Page Header Area Wrapper ==-->
+
+        <!--== Start Team Area Wrapper ==-->
+        <section class="team-area team-inner2-area">
+            <div class="container">
+                <div class="row">
+                    <h2>Prueba</h2>
+                    
+                </div>
+                <div class="row">
+                    <h2>Pruebas detalles</h2>
+                </div>
+            </div>
+        </section>
+        <!--== End Team Area Wrapper ==-->
+    </main>
+
+{% endblock %}

@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 # Create your views here.
-from admin.utils import get_active_modules, commision, edit_candidate, vote, send_pass, ballot, register_vote, selector, \
+from admin.utils import detalle_prueba, get_active_modules, commision, edit_candidate, vote, send_pass, ballot, register_vote, selector, \
     results
 from associate.models import Associate
 from council_member.models import CouncilMember
@@ -84,3 +84,7 @@ def selector60(request):
 @login_required
 def selector15(request):
     return selector(request, 15)
+
+@login_required
+def detalles(request):
+    return detalle_prueba(request)
