@@ -57,7 +57,7 @@ urlpatterns = [
     path('resultados_15/', results15, name='results15'),
     path('admin/', admin.site.urls),
     path('accounts/', include('authenticate.urls')),
-    path('<str:path>/', detalles, name='detalles'),
+    path('detalles/<str:path>/', detalles, name='detalles'),
     path('gpes/60/recuento/', selector60, name='recuento60'),
     path('gpes/15/recuento/', selector15, name='recuento15'),
 ]
