@@ -381,6 +381,6 @@ def selector(request, _type):
 
 def detalle_prueba(request):
     return render(
-        request, 'selector.html'
+        request, 'detalles_modulo.html'
     )
 
