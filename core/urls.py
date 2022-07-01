@@ -26,14 +26,14 @@ from core import settings
 
 urlpatterns = [
     path('', include('admin.urls')),
-    path('presentacion_60', presentation60_view, name='presentation60'),
-    path('presentacion_15', presentation15_view, name='presentation15'),
+    path('presentacion_60/', presentation60_view, name='presentation60'),
+    path('presentacion_15/', presentation15_view, name='presentation15'),
     path('confirmar_60', confirm60_view, name='confirm60'),
     path('confirmar_15', confirm15_view, name='confirm15'),
     path('ok_60', ok60, name='ok60'),
     path('ok_15', ok15, name='ok15'),
-    path('alegaciones_60', allegation60, name='allegation60'),
-    path('alegaciones_15', allegation15, name='allegation15'),
+    path('alegaciones_60/', allegation60, name='allegation60'),
+    path('alegaciones_15/', allegation15, name='allegation15'),
     path('ver_candidaturas_60/', pre_validate_candidatures60, name='candidatures60'),
     path('ver_candidaturas_60_validated/', view_candidatures60, name='candidatures60-validated'),
     path('ver_candidaturas_15/', pre_validate_candidatures15, name='candidatures15'),
