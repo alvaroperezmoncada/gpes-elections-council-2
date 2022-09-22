@@ -48,7 +48,7 @@ class Candidature(models.Model):
         verbose_name='Miembro del Consejo que presenta al candidato/a: Copia del DNI/ Pasaporte/ Tarjeta de residente',
     )
     photo = models.ImageField(
-        upload_to="%Y/%m/%d", verbose_name=u'Foto -máximo 200kB-', null=True, blank=True
+        upload_to="%Y/%m/%d", verbose_name=u'Foto -máximo 3Mb-', null=True, blank=True
     )
     email = models.EmailField(
         verbose_name='Correo electrónico para facilitar a la comisión electoral la resolución de errores'
